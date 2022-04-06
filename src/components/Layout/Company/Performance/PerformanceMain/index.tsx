@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from './index.style';
 import { IconDownArrowSmall, IconSearch, IconDownArrowGray } from '@svg';
 
@@ -27,6 +27,8 @@ const PerformanceMain: React.FC<IProps> = ({
   onChangeSearchText,
   onClickSetSelectedSearchTitle,
 }) => {
+  const [selectedRow, setSelectedRow] = useState<string | number | null>(null);
+
   return (
     <S.Container>
       <S.FilterWrapper>
@@ -133,12 +135,21 @@ const PerformanceMain: React.FC<IProps> = ({
           {Array(10)
             .fill(0)
             .map((_, index) => (
-              <S.ContentWrapper key={index}>
+              <S.ContentWrapper
+                key={index}
+                onMouseEnter={() => setSelectedRow(index)}
+              >
                 <S.LongContent>(주)세진에스.이</S.LongContent>
                 <S.LongContent>COOK FAN</S.LongContent>
                 <S.ShortContent>3</S.ShortContent>
                 <S.ShortContent>2012.2</S.ShortContent>
                 <S.LongContent>연세대학교</S.LongContent>
+                {selectedRow === index && (
+                  <S.ModifyButtonWrapper>
+                    <S.ModifyButton>삭제</S.ModifyButton>
+                    <S.ModifyButton color="blue">수정</S.ModifyButton>
+                  </S.ModifyButtonWrapper>
+                )}
               </S.ContentWrapper>
             ))}
         </div>

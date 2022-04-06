@@ -263,3 +263,22 @@ export const SelectBox = styled.div<selectBoxProps>`
     width: 12px;
   }
 `;
+
+export const ModifyButtonWrapper = styled.div`
+  ${mixins.flexSet()}
+  position: absolute;
+  right: 0px;
+`;
+
+export const ModifyButton = styled.button<{ color?: string }>`
+  margin-right: 12px;
+  padding: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 24px;
+  color: ${({ color }) => color ?? 'red'};
+
+  &:last-child {
+    margin-right: 0;
+  }
+`;
