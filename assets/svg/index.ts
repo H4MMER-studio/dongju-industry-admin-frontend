@@ -4,6 +4,8 @@ import IconClose from './icon_close.svg';
 import IconDownArrowSmall from './icon_down_arrow_small.svg';
 import IconDownArrowGray from './icon_down_arrow_gray.svg';
 import IconSearch from './icon_search.svg';
+import IconAdd from './icon_add.svg';
+import IconCloseWhite from './icon_close_white.svg';
 
 export {
   IconHamburg,
@@ -12,4 +14,6 @@ export {
   IconDownArrowSmall,
   IconSearch,
   IconDownArrowGray,
+  IconAdd,
+  IconCloseWhite,
 };

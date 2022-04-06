@@ -150,6 +150,7 @@ const CompanyContainer: React.FC<Iprops> = ({
           case 'certification':
             return (
               <Certification
+                certifications={[{ id: 'aa', title: '인증서', images: [] }]}
                 clickCertificationTypeMenu={clickCertificationTypeMenu}
               />
             );
