@@ -17,17 +17,19 @@ interface Iprops {
 
 const STDContainer = styled.main`
   padding-top: 48px;
-  margin: 0 auto;
+  margin-left: 36px;
   width: 1240px;
   height: 100%;
   overflow-y: scroll;
 
   @media (max-width: 1682px) {
     width: 974px;
+    margin-left: 18px;
   }
 
   @media (max-width: 1023px) {
     width: 100%;
+    margin: 0 auto;
     padding: 48px 16px 64px 16px;
   }
 `;
@@ -119,19 +121,21 @@ const CompanyContainer: React.FC<Iprops> = ({
 
   return (
     <STDContainer>
-      <BannerSection marginBottom={menu === 'performance' ? 24 : undefined}>
-        <BannerImage
-          src={
-            width > 1023
-              ? Images.CompanyInfoBannerLarge
-              : Images.CompanyInfoBannerSmall
-          }
-        />
-        <CenterLayout>
-          <BreadCrum>{`홈/회사/${displayTitle(menu)}`}</BreadCrum>
-          <Title>{displayTitle(menu)}</Title>
-        </CenterLayout>
-      </BannerSection>
+      {menu === 'history' && (
+        <BannerSection>
+          <BannerImage
+            src={
+              width > 1023
+                ? Images.CompanyInfoBannerLarge
+                : Images.CompanyInfoBannerSmall
+            }
+          />
+          <CenterLayout>
+            <BreadCrum>{`홈/회사/${displayTitle(menu)}`}</BreadCrum>
+            <Title>{displayTitle(menu)}</Title>
+          </CenterLayout>
+        </BannerSection>
+      )}
       {(() => {
         switch (menu) {
           case 'welcome':
