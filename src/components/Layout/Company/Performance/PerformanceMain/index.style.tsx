@@ -144,6 +144,7 @@ export const ShortTitle = styled.div`
 
 export const ContentWrapper = styled.div`
   ${mixins.flexSet('unset')}
+  position: relative;
   height: 49px;
 `;
 
@@ -168,6 +169,7 @@ export const DeliverySelectBox = styled.div`
   position: absolute;
   top: 56px;
   left: 0;
+  z-index: 100;
   min-width: 100px;
   padding: 18px 22px;
   background: #ffffff;
@@ -192,6 +194,7 @@ export const DeliverySearchTextBox = styled.div`
   position: absolute;
   top: 56px;
   left: 0;
+  z-index: 100;
   width: 100%;
   padding: 18px 22px;
   background: #ffffff;
@@ -220,4 +223,43 @@ export const SelectOrderBox = styled.div`
   background: #ffffff;
   box-shadow: 2px 4px 12px 4px rgba(56, 56, 56, 0.08);
   border-radius: 12px;
+`;
+
+export const InputBox = styled.input<{ width?: number }>`
+  width: ${({ width }) => width ?? 100}px;
+  height: 48px;
+  padding: 0 16px;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 24px;
+  color: #383838;
+  border: 1px solid #e8e8e8;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: #fcfcfc;
+`;
+
+type selectBoxProps = {
+  width?: number;
+  isValueOn?: false;
+};
+
+export const SelectBox = styled.div<selectBoxProps>`
+  ${mixins.flexSet('space-between')}
+  width: ${({ width }) => width ?? 100}px;
+  height: 48px;
+  padding: 0 16px;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 24px;
+  color: ${({ isValueOn }) => (!isValueOn ? '#777777' : '#383838')};
+  border: 1px solid #e8e8e8;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: #fcfcfc;
+  cursor: pointer;
+
+  svg {
+    width: 12px;
+  }
 `;
