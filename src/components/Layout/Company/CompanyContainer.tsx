@@ -17,14 +17,13 @@ interface Iprops {
 
 const STDContainer = styled.main`
   padding-top: 48px;
-  margin-left: 36px;
-  width: 1240px;
+  margin: 0 36px;
+  width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   @media (max-width: 1682px) {
-    width: 974px;
-    margin-left: 18px;
+    margin: 0 18px;
   }
 
   @media (max-width: 1023px) {

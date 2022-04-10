@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectHomeState } from '@/store';
+import { selectHomeState, selectPerformanceState } from '@/store';
 
 function useGetRootState() {
   const rootState = useSelector((rootState) => rootState);
@@ -8,6 +8,7 @@ function useGetRootState() {
 
 export const useGetStore = {
   home: () => selectHomeState(useGetRootState().home),
+  performance: () => selectPerformanceState(useGetRootState().performance),
 };
 
 export * from './useResize';

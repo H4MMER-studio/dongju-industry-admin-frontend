@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import * as S from './index.style';
+import { useDispatch } from 'react-redux';
+import { useGetStore } from '@/hooks';
+import { performanceActions } from '@/store';
 import { IconDownArrowSmall, IconSearch, IconDownArrowGray } from '@svg';
 
 interface IProps {
@@ -28,6 +31,8 @@ const PerformanceMain: React.FC<IProps> = ({
   onClickSetSelectedSearchTitle,
 }) => {
   const [selectedRow, setSelectedRow] = useState<string | number | null>(null);
+  const { selectedInfo } = useGetStore.performance();
+  const dispatch = useDispatch();
 
   return (
     <S.Container>
@@ -139,16 +144,78 @@ const PerformanceMain: React.FC<IProps> = ({
                 key={index}
                 onMouseEnter={() => setSelectedRow(index)}
               >
-                <S.LongContent>(주)세진에스.이</S.LongContent>
-                <S.LongContent>COOK FAN</S.LongContent>
-                <S.ShortContent>3</S.ShortContent>
-                <S.ShortContent>2012.2</S.ShortContent>
-                <S.LongContent>연세대학교</S.LongContent>
-                {selectedRow === index && (
+                {selectedInfo?.id === index ? (
+                  <>
+                    <S.InputBox
+                      containerStyle={'margin-left: 12px;'}
+                      defaultValue={selectedInfo.shipName}
+                      width={1}
+                    />
+                    <S.InputBox defaultValue={selectedInfo.name} />
+                    <S.InputBox width={0.2} defaultValue={selectedInfo.count} />
+                    <S.SelectBox width={0.2}>
+                      {selectedInfo.year}
+                      <IconDownArrowGray />
+                    </S.SelectBox>
+                    <S.SelectBox width={0.2}>
+                      {selectedInfo.month}
+                      <IconDownArrowGray />
+                    </S.SelectBox>
+                    <S.InputBox width={0.74} defaultValue={selectedInfo.etc} />
+                  </>
+                ) : (
+                  <>
+                    <S.LongContent>(주)세진에스.이</S.LongContent>
+                    <S.LongContent>COOK FAN</S.LongContent>
+                    <S.ShortContent>3</S.ShortContent>
+                    <S.ShortContent>2012.2</S.ShortContent>
+                    <S.LongContent>연세대학교</S.LongContent>
+                  </>
+                )}
+                {selectedInfo?.id === index ? (
                   <S.ModifyButtonWrapper>
-                    <S.ModifyButton>삭제</S.ModifyButton>
-                    <S.ModifyButton color="blue">수정</S.ModifyButton>
+                    <S.ModifyButton
+                      onClick={() => {
+                        setSelectedRow(null);
+                        dispatch(performanceActions.setSelectedInfo(null));
+                      }}
+                    >
+                      취소
+                    </S.ModifyButton>
+                    <S.ModifyButton
+                      color="blue"
+                      onClick={() => {
+                        alert('저장 완료');
+                        dispatch(performanceActions.setSelectedInfo(null));
+                      }}
+                    >
+                      저장
+                    </S.ModifyButton>
                   </S.ModifyButtonWrapper>
+                ) : (
+                  selectedRow === index && (
+                    <S.ModifyButtonWrapper>
+                      <S.ModifyButton>삭제</S.ModifyButton>
+                      <S.ModifyButton
+                        color="blue"
+                        onClick={() =>
+                          dispatch(
+                            performanceActions.setSelectedInfo({
+                              id: index,
+                              shipName: '(주)세진에스.이',
+                              name: 'COOK FAN',
+                              count: 3,
+                              year: 2012,
+                              month: 2,
+                              etc: '연세대학교',
+                            })
+                          )
+                        }
+                      >
+                        수정
+                      </S.ModifyButton>
+                    </S.ModifyButtonWrapper>
+                  )
                 )}
               </S.ContentWrapper>
             ))}

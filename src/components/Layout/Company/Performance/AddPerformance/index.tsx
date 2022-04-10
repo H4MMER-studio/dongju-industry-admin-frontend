@@ -4,12 +4,22 @@ import { mixins } from '@/styles';
 import { IconDownArrowGray } from '@svg';
 
 const STDContainer = styled.div`
+  margin-right: 10%;
+
   h1 {
     margin-bottom: 24px;
     font-weight: 600;
     font-size: 36px;
     line-height: 43px;
     color: #383838;
+  }
+
+  @media (max-width: 1682px) {
+    margin-right: 12%;
+  }
+
+  @media (max-width: 1023px) {
+    margin-right: 0;
   }
 `;
 

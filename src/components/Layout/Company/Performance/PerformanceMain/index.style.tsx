@@ -8,9 +8,15 @@ export const Container = styled.article`
 export const FilterWrapper = styled.div`
   ${mixins.flexSet('space-between')}
   margin-bottom: 12px;
+  margin-right: 10%;
+
+  @media (max-width: 1682px) {
+    margin-right: 12%;
+  }
 
   @media (max-width: 1024px) {
     ${mixins.flexSet('center', 'flex-end', 'column')}
+    margin-right: 0;
   }
 `;
 
@@ -114,9 +120,18 @@ export const OrderButton = styled.div`
 `;
 
 export const TableContainer = styled.div`
+  margin-right: 10%;
   border-top: 1px solid #777777;
   border-bottom: 1px solid #777777;
   background: white;
+
+  @media (max-width: 1682px) {
+    margin-right: 12%;
+  }
+
+  @media (max-width: 1023px) {
+    margin-right: 0;
+  }
 `;
 
 export const TitleWrapper = styled.div`
@@ -225,10 +240,17 @@ export const SelectOrderBox = styled.div`
   border-radius: 12px;
 `;
 
-export const InputBox = styled.input<{ width?: number }>`
-  width: ${({ width }) => width ?? 100}px;
-  height: 48px;
+type inputBoxProps = {
+  width?: number;
+  containerStyle?: string;
+};
+
+export const InputBox = styled.input<inputBoxProps>`
+  flex: ${({ width }) => width ?? 1};
+  min-width: 40px;
+  height: 40px;
   padding: 0 16px;
+  margin-right: 12px;
   font-weight: 400;
   font-size: 17px;
   line-height: 24px;
@@ -237,18 +259,21 @@ export const InputBox = styled.input<{ width?: number }>`
   box-sizing: border-box;
   border-radius: 8px;
   background: #fcfcfc;
+  ${({ containerStyle }) => containerStyle}
 `;
 
 type selectBoxProps = {
   width?: number;
   isValueOn?: false;
+  containerStyle?: string;
 };
 
 export const SelectBox = styled.div<selectBoxProps>`
   ${mixins.flexSet('space-between')}
-  width: ${({ width }) => width ?? 100}px;
-  height: 48px;
+  flex: ${({ width }) => width ?? 1};
+  height: 40px;
   padding: 0 16px;
+  margin-right: 12px;
   font-weight: 400;
   font-size: 17px;
   line-height: 24px;
@@ -262,16 +287,18 @@ export const SelectBox = styled.div<selectBoxProps>`
   svg {
     width: 12px;
   }
+
+  ${({ containerStyle }) => containerStyle}
 `;
 
 export const ModifyButtonWrapper = styled.div`
   ${mixins.flexSet()}
   position: absolute;
-  right: 0px;
+  right: -100px;
 `;
 
 export const ModifyButton = styled.button<{ color?: string }>`
-  margin-right: 12px;
+  margin-right: 8px;
   padding: 8px;
   font-weight: 600;
   font-size: 15px;
