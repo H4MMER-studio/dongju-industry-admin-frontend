@@ -18,6 +18,10 @@ const Title = styled.div`
   margin-bottom: 24px;
 `;
 
+const ListLayout = styled.div`
+  margin-bottom: 36px;
+`;
+
 const Certification: React.FC<Iprops> = ({
   certifications,
   clickCertificationTypeMenu,
@@ -28,21 +32,28 @@ const Certification: React.FC<Iprops> = ({
     <>
       <SDTCertificationLayout>
         <Title>인증서 추가</Title>
-        {certifications.map((certification) => {
+
+        {[1, 2].map((v) => {
           return (
-            <CertificationList
-              title={certification.title}
-              images={certification.images}
-              clickAddCertification={() => setOpenEditor(true)}
-              key={certification.id}
-            />
+            <ListLayout>
+              {certifications.map((certification) => {
+                return (
+                  <CertificationList
+                    title={certification.title}
+                    images={certification.images}
+                    clickAddCertification={() => setOpenEditor(true)}
+                    key={certification.id}
+                  />
+                );
+              })}
+              <CertificationEditor
+                isOpen={openEditor}
+                close={() => setOpenEditor(false)}
+              />
+            </ListLayout>
           );
         })}
       </SDTCertificationLayout>
-      <CertificationEditor
-        isOpen={openEditor}
-        close={() => setOpenEditor(false)}
-      />
     </>
   );
 };
