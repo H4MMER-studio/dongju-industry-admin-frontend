@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { performanceActions } from '@/store';
 import PerformanceMain from './PerformanceMain';
 import AddPerformance from './AddPerformance';
 
 const Performance: React.FC = () => {
   const [selectedSearchTitle, setSelectedSearchTitle] = useState('납품처');
+  const [page, setPage] = useState(1);
   const [modalOnAt, setModalOnAt] = useState('');
   const [searchText, setSearchText] = useState('');
   const [orderModalOn, setOrderModalOn] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState('new');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     document.onclick = onClickCloseModal;
@@ -16,6 +20,16 @@ const Performance: React.FC = () => {
       document.onmousedown = null;
     };
   }, []);
+
+  useEffect(() => {
+    dispatch(
+      performanceActions.getDeliveryList({
+        isAsc: selectedOrder !== 'new',
+        skip: 10 * page - 9,
+        limit: 10 * page,
+      })
+    );
+  }, [selectedOrder, page]);
 
   const onClickCloseModal = () => {
     setModalOnAt('');
@@ -43,10 +57,15 @@ const Performance: React.FC = () => {
     setModalOnAt('');
   };
 
+  const onClickPageHandler = (page: number) => {
+    setPage(page);
+  };
+
   return (
     <>
       <AddPerformance />
       <PerformanceMain
+        page={page}
         modalOnAt={modalOnAt}
         orderModalOn={orderModalOn}
         searchText={searchText}
@@ -57,6 +76,7 @@ const Performance: React.FC = () => {
         onClickSetSelectedOrder={onClickSetSelectedOrder}
         onChangeSearchText={onChangeSearchText}
         onClickSetSelectedSearchTitle={onClickSetSelectedSearchTitle}
+        onClickPageHandler={onClickPageHandler}
       />
     </>
   );

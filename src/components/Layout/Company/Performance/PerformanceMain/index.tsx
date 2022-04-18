@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import * as S from './index.style';
-import { useDispatch } from 'react-redux';
 import { useGetStore } from '@/hooks';
+import { useDispatch } from 'react-redux';
 import { performanceActions } from '@/store';
+import { Images } from 'public/image';
 import { IconDownArrowSmall, IconSearch, IconDownArrowGray } from '@svg';
 
 interface IProps {
+  page: number;
   searchText: string;
   selectedOrder: string;
   modalOnAt: string;
@@ -16,9 +18,11 @@ interface IProps {
   onClickSetSelectedOrder(type: string): void;
   onChangeSearchText(text: string): void;
   onClickSetSelectedSearchTitle(type: string): void;
+  onClickPageHandler(page: number): void;
 }
 
 const PerformanceMain: React.FC<IProps> = ({
+  page,
   searchText,
   selectedOrder,
   modalOnAt,
@@ -29,9 +33,10 @@ const PerformanceMain: React.FC<IProps> = ({
   onClickSetSelectedOrder,
   onChangeSearchText,
   onClickSetSelectedSearchTitle,
+  onClickPageHandler,
 }) => {
   const [selectedRow, setSelectedRow] = useState<string | number | null>(null);
-  const { selectedInfo } = useGetStore.performance();
+  const { selectedInfo, deliveryList } = useGetStore.performance();
   const dispatch = useDispatch();
 
   return (
@@ -137,14 +142,21 @@ const PerformanceMain: React.FC<IProps> = ({
           <S.LongTitle>비고</S.LongTitle>
         </S.TitleWrapper>
         <div>
-          {Array(10)
-            .fill(0)
-            .map((_, index) => (
+          {deliveryList?.list?.map(
+            ({
+              _id,
+              delivery_amount,
+              delivery_month,
+              delivery_year,
+              delivery_product,
+              delivery_supplier,
+              delivery_reference,
+            }) => (
               <S.ContentWrapper
-                key={index}
-                onMouseEnter={() => setSelectedRow(index)}
+                key={_id}
+                onMouseEnter={() => setSelectedRow(_id)}
               >
-                {selectedInfo?.id === index ? (
+                {selectedInfo?.id === _id ? (
                   <>
                     <S.InputBox
                       containerStyle={'margin-left: 12px;'}
@@ -165,14 +177,16 @@ const PerformanceMain: React.FC<IProps> = ({
                   </>
                 ) : (
                   <>
-                    <S.LongContent>(주)세진에스.이</S.LongContent>
-                    <S.LongContent>COOK FAN</S.LongContent>
-                    <S.ShortContent>3</S.ShortContent>
-                    <S.ShortContent>2012.2</S.ShortContent>
-                    <S.LongContent>연세대학교</S.LongContent>
+                    <S.LongContent>{delivery_supplier}</S.LongContent>
+                    <S.LongContent>{delivery_product}</S.LongContent>
+                    <S.ShortContent>{delivery_amount}</S.ShortContent>
+                    <S.ShortContent>
+                      {delivery_year}.{delivery_month}
+                    </S.ShortContent>
+                    <S.LongContent>{delivery_reference}</S.LongContent>
                   </>
                 )}
-                {selectedInfo?.id === index ? (
+                {selectedInfo?.id === _id ? (
                   <S.ModifyButtonWrapper>
                     <S.ModifyButton
                       onClick={() => {
@@ -193,7 +207,7 @@ const PerformanceMain: React.FC<IProps> = ({
                     </S.ModifyButton>
                   </S.ModifyButtonWrapper>
                 ) : (
-                  selectedRow === index && (
+                  selectedRow === _id && (
                     <S.ModifyButtonWrapper>
                       <S.ModifyButton>삭제</S.ModifyButton>
                       <S.ModifyButton
@@ -201,13 +215,13 @@ const PerformanceMain: React.FC<IProps> = ({
                         onClick={() =>
                           dispatch(
                             performanceActions.setSelectedInfo({
-                              id: index,
-                              shipName: '(주)세진에스.이',
-                              name: 'COOK FAN',
-                              count: 3,
-                              year: 2012,
-                              month: 2,
-                              etc: '연세대학교',
+                              id: _id,
+                              shipName: delivery_supplier,
+                              name: delivery_product,
+                              count: delivery_amount,
+                              year: delivery_year,
+                              month: delivery_month,
+                              etc: delivery_reference,
                             })
                           )
                         }
@@ -218,9 +232,41 @@ const PerformanceMain: React.FC<IProps> = ({
                   )
                 )}
               </S.ContentWrapper>
-            ))}
+            )
+          )}
         </div>
       </S.TableContainer>
+      <S.PageNationLayout>
+        <S.ArrowIcon
+          onClick={() => {
+            if (page !== 1) {
+              onClickPageHandler(page - 1);
+            }
+          }}
+          src={Images.PagenationLeft}
+          style={{ marginRight: 20 }}
+        />
+        {Array(Math.round(deliveryList.size / 10))
+          .fill(0)
+          .map((_, index) => (
+            <S.PageNumber
+              isSelected={page === index + 1}
+              onClick={() => onClickPageHandler(index + 1)}
+            >
+              {index + 1}
+            </S.PageNumber>
+          ))}
+
+        <S.ArrowIcon
+          onClick={() => {
+            if (page !== Math.round(deliveryList.size / 10)) {
+              onClickPageHandler(page + 1);
+            }
+          }}
+          src={Images.PagenationRight}
+          style={{ marginLeft: 8 }}
+        />
+      </S.PageNationLayout>
     </S.Container>
   );
 };

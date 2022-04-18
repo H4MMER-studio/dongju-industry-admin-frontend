@@ -28,9 +28,11 @@ const slice = createSlice({
 
 export const selectPerformanceState = createSelector(
   (state: IPerformanceInitialState) => state.selectedInfo,
-  (selectedInfo) => {
+  (state: IPerformanceInitialState) => state.deliveryList,
+  (selectedInfo, deliveryList) => {
     return {
       selectedInfo,
+      deliveryList,
     };
   }
 );

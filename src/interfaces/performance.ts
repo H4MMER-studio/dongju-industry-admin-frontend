@@ -4,7 +4,7 @@ export interface IPerformanceInitialState {
 }
 
 export interface ISelectedInfo {
-  id: number;
+  id: number | string;
   shipName: string;
   name: string;
   count: number;
