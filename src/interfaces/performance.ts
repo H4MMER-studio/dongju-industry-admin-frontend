@@ -31,3 +31,12 @@ export interface IGetDeliveryListParams {
   limit: number;
   isAsc: boolean;
 }
+
+export interface IPostDelivery {
+  delivery_supplier: string;
+  delivery_product: string;
+  delivery_amount: number | string;
+  delivery_year: number | string;
+  delivery_month?: number | string;
+  delivery_reference?: string;
+}

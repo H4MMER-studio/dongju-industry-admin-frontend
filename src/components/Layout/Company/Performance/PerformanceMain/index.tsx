@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { performanceActions } from '@/store';
 import { Images } from 'public/image';
 import { IconDownArrowSmall, IconSearch, IconDownArrowGray } from '@svg';
+import { IPostDelivery, ISelectedInfo } from '@/interfaces';
+import PerformanceItem from './PerformanceItem';
 
 interface IProps {
   page: number;
@@ -19,6 +21,8 @@ interface IProps {
   onChangeSearchText(text: string): void;
   onClickSetSelectedSearchTitle(type: string): void;
   onClickPageHandler(page: number): void;
+  onClickDeleteDelivery(id: string | number): void;
+  onClickPatchDelivery(id: string | number, info: IPostDelivery): void;
 }
 
 const PerformanceMain: React.FC<IProps> = ({
@@ -34,10 +38,16 @@ const PerformanceMain: React.FC<IProps> = ({
   onChangeSearchText,
   onClickSetSelectedSearchTitle,
   onClickPageHandler,
+  onClickDeleteDelivery,
+  onClickPatchDelivery,
 }) => {
   const [selectedRow, setSelectedRow] = useState<string | number | null>(null);
   const { selectedInfo, deliveryList } = useGetStore.performance();
   const dispatch = useDispatch();
+
+  const onClickSetSelectedInfo = (info: ISelectedInfo | null) => {
+    dispatch(performanceActions.setSelectedInfo(info));
+  };
 
   return (
     <S.Container>
@@ -142,98 +152,20 @@ const PerformanceMain: React.FC<IProps> = ({
           <S.LongTitle>비고</S.LongTitle>
         </S.TitleWrapper>
         <div>
-          {deliveryList?.list?.map(
-            ({
-              _id,
-              delivery_amount,
-              delivery_month,
-              delivery_year,
-              delivery_product,
-              delivery_supplier,
-              delivery_reference,
-            }) => (
-              <S.ContentWrapper
-                key={_id}
-                onMouseEnter={() => setSelectedRow(_id)}
-              >
-                {selectedInfo?.id === _id ? (
-                  <>
-                    <S.InputBox
-                      containerStyle={'margin-left: 12px;'}
-                      defaultValue={selectedInfo.shipName}
-                      width={1}
-                    />
-                    <S.InputBox defaultValue={selectedInfo.name} />
-                    <S.InputBox width={0.2} defaultValue={selectedInfo.count} />
-                    <S.SelectBox width={0.2}>
-                      {selectedInfo.year}
-                      <IconDownArrowGray />
-                    </S.SelectBox>
-                    <S.SelectBox width={0.2}>
-                      {selectedInfo.month}
-                      <IconDownArrowGray />
-                    </S.SelectBox>
-                    <S.InputBox width={0.74} defaultValue={selectedInfo.etc} />
-                  </>
-                ) : (
-                  <>
-                    <S.LongContent>{delivery_supplier}</S.LongContent>
-                    <S.LongContent>{delivery_product}</S.LongContent>
-                    <S.ShortContent>{delivery_amount}</S.ShortContent>
-                    <S.ShortContent>
-                      {delivery_year}.{delivery_month}
-                    </S.ShortContent>
-                    <S.LongContent>{delivery_reference}</S.LongContent>
-                  </>
-                )}
-                {selectedInfo?.id === _id ? (
-                  <S.ModifyButtonWrapper>
-                    <S.ModifyButton
-                      onClick={() => {
-                        setSelectedRow(null);
-                        dispatch(performanceActions.setSelectedInfo(null));
-                      }}
-                    >
-                      취소
-                    </S.ModifyButton>
-                    <S.ModifyButton
-                      color="blue"
-                      onClick={() => {
-                        alert('저장 완료');
-                        dispatch(performanceActions.setSelectedInfo(null));
-                      }}
-                    >
-                      저장
-                    </S.ModifyButton>
-                  </S.ModifyButtonWrapper>
-                ) : (
-                  selectedRow === _id && (
-                    <S.ModifyButtonWrapper>
-                      <S.ModifyButton>삭제</S.ModifyButton>
-                      <S.ModifyButton
-                        color="blue"
-                        onClick={() =>
-                          dispatch(
-                            performanceActions.setSelectedInfo({
-                              id: _id,
-                              shipName: delivery_supplier,
-                              name: delivery_product,
-                              count: delivery_amount,
-                              year: delivery_year,
-                              month: delivery_month,
-                              etc: delivery_reference,
-                            })
-                          )
-                        }
-                      >
-                        수정
-                      </S.ModifyButton>
-                    </S.ModifyButtonWrapper>
-                  )
-                )}
-              </S.ContentWrapper>
-            )
-          )}
+          {deliveryList?.list?.map((info) => (
+            <PerformanceItem
+              key={info._id}
+              deliveryInfo={info}
+              selectedInfo={selectedInfo}
+              selectedRow={selectedRow}
+              onClickDeleteDelivery={onClickDeleteDelivery}
+              onClickPatchDelivery={onClickPatchDelivery}
+              onClickSetSelectedInfo={onClickSetSelectedInfo}
+              selectedRowHandler={(id: string | number | null) =>
+                setSelectedRow(id)
+              }
+            />
+          ))}
         </div>
       </S.TableContainer>
       <S.PageNationLayout>

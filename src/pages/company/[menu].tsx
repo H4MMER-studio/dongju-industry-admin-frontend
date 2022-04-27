@@ -2,6 +2,8 @@ import React from 'react';
 import Router, { useRouter } from 'next/router';
 import { Company } from '@/components';
 import { certificationMenuType } from '@/interfaces';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { COMPANY_MENU } from '@/utils';
 
 const CompanyView: React.FC = () => {
   const router = useRouter();
@@ -22,3 +24,24 @@ const CompanyView: React.FC = () => {
 };
 
 export default CompanyView;
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  return {
+    fallback: false,
+    paths: COMPANY_MENU.map((datapoint) => ({
+      params: {
+        menu: datapoint,
+      },
+    })),
+  };
+};
+
+export const getStaticProps: GetStaticProps = (ctx) => {
+  const currentMenu = ctx.params?.menu;
+
+  return {
+    props: {
+      currentMenu,
+    },
+  };
+};

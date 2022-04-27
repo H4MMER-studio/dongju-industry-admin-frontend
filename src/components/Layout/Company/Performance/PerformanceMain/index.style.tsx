@@ -234,6 +234,7 @@ export const SelectOrderBox = styled.div`
   position: absolute;
   top: 56px;
   left: 0;
+  z-index: 1000;
   width: 100%;
   padding: 18px 22px;
   background: #ffffff;
