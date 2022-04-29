@@ -1,7 +1,12 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { API, CERTIFICATIONS_API } from '@/utils';
+import { API, CERTIFICATIONS_API, CERTIFICATION_API } from '@/utils';
 import { certificationActions } from '../module/certification';
-import { ICertificationMenuType, ICertificationList } from '@/interfaces';
+import {
+  ICertificationMenuType,
+  ICertificationList,
+  ICertificationForm,
+  ActionType,
+} from '@/interfaces';
 
 export function* getCertificationListSaga({
   payload,
@@ -19,6 +24,31 @@ export function* getCertificationListSaga({
   }
 }
 
+export function* createCertificationSaga({
+  payload,
+}: ActionType & { payload: ICertificationForm }) {
+  console.log('최종결과:', payload);
+
+  const formData = new FormData();
+
+  formData.append('certification_title', `${payload.certification_title}`);
+  formData.append('certification_type', `${payload.certification_type}`);
+  // formData.append('files[0]', payload.certification_image);
+
+  try {
+    yield call(
+      API.POST,
+      `${CERTIFICATION_API}`,
+      { bodyData: formData },
+      'form'
+    );
+    alert('생성 완료');
+  } catch (error) {
+    console.log(error);
+    alert('생성 실패');
+  }
+}
+
 export function* watchCertificationList() {
   yield takeEvery(
     certificationActions.getCertificationList,
@@ -26,4 +56,13 @@ export function* watchCertificationList() {
   );
 }
 
-export default [watchCertificationList].map((fn) => fn());
+export function* watchCreateCertification() {
+  yield takeEvery(
+    certificationActions.createCertification,
+    createCertificationSaga
+  );
+}
+
+export default [watchCertificationList, watchCreateCertification].map((fn) =>
+  fn()
+);

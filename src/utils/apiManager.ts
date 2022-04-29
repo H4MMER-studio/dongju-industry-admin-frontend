@@ -12,6 +12,16 @@ const instance = axios.create({
   xsrfHeaderName: 'X-CSRFTOKEN',
 });
 
+const formDataInstance = axios.create({
+  baseURL: 'https://api.dongjuind.co.kr/api/v1',
+  timeout: 40000,
+  headers: {
+    'Content-Type': 'application/form-data',
+  },
+  xsrfCookieName: 'csrftoken',
+  xsrfHeaderName: 'X-CSRFTOKEN',
+});
+
 const GET = async (entry: string, payload?: { params?: any }) => {
   const data = await instance({
     method: 'GET',
@@ -22,13 +32,26 @@ const GET = async (entry: string, payload?: { params?: any }) => {
   return data.data;
 };
 
-const POST = async (entry: string, payload?: { bodyData: any }) => {
-  const data = await instance({
-    url: entry,
-    method: 'POST',
-    data: payload?.bodyData,
-  });
-  return data.data;
+const POST = async (
+  entry: string,
+  payload?: { bodyData: any },
+  contentType?: 'form'
+) => {
+  if (contentType === 'form') {
+    const data = await formDataInstance({
+      url: entry,
+      method: 'POST',
+      data: payload?.bodyData,
+    });
+    return data.data;
+  } else {
+    const data = await instance({
+      url: entry,
+      method: 'POST',
+      data: payload?.bodyData,
+    });
+    return data.data;
+  }
 };
 
 const DELETE = async (

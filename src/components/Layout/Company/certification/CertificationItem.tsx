@@ -1,20 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IconAdd } from '@svg';
+import { ICertificationImage } from '@/interfaces';
 
 interface IProps {
   title: string;
-  images: [];
+  images: ICertificationImage[];
+  isLast: boolean;
   clickAddCertification: () => void;
 }
 
-const CertificationEditorLayout = styled.div``;
-
-const Title = styled.div`
-  font-size: 24px;
-  font-weight: 600;
-  color: #555555;
-  margin-bottom: 16px;
+const CertificationEditorLayout = styled.div`
+  margin-right: 20px;
 `;
 
 const CertificationListLayout = styled.div`
@@ -30,6 +27,7 @@ const AddCertificationLayout = styled.div`
   height: 240px;
   background-color: #e8e8e8;
   cursor: pointer;
+  margin-left: 20px;
 `;
 
 const AddButtonLayout = styled.div``;
@@ -50,25 +48,36 @@ const AddIconLayout = styled.div`
   justify-content: center;
 `;
 
-const CertificationList: React.VFC<IProps> = (props) => {
+const CertificationImage = styled.img`
+  width: 190px;
+  height: 240px;
+`;
+
+const CertificationItem: React.VFC<IProps> = (props) => {
   return (
     <CertificationEditorLayout>
-      <Title>{props.title}</Title>
       <CertificationListLayout>
-        {props.images.map((image) => (
-          <div key={image}></div>
+        {props.images?.map((image) => (
+          <CertificationImage
+            src={image.url}
+            key={image.name}
+            alt="인증서 사진"
+          />
         ))}
-        <AddCertificationLayout onClick={props.clickAddCertification}>
-          <AddButtonLayout>
-            <AddIconLayout>
-              <IconAdd />
-            </AddIconLayout>
-            <AddInfoText>등록</AddInfoText>
-          </AddButtonLayout>
-        </AddCertificationLayout>
+
+        {props.isLast && (
+          <AddCertificationLayout onClick={props.clickAddCertification}>
+            <AddButtonLayout>
+              <AddIconLayout>
+                <IconAdd />
+              </AddIconLayout>
+              <AddInfoText>등록</AddInfoText>
+            </AddButtonLayout>
+          </AddCertificationLayout>
+        )}
       </CertificationListLayout>
     </CertificationEditorLayout>
   );
 };
 
-export default CertificationList;
+export default CertificationItem;

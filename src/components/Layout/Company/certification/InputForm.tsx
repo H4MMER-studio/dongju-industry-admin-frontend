@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 interface Iprops {
   title: string;
+  onChange: (value: string) => void;
 }
 
 const InputFormLayout = styled.div``;
@@ -23,11 +24,11 @@ const InputBox = styled.input`
   padding: 0 16px;
 `;
 
-const InputForm: React.VFC<Iprops> = ({ title }) => {
+const InputForm: React.VFC<Iprops> = ({ title, onChange }) => {
   return (
     <InputFormLayout>
       <Title>{title}</Title>
-      <InputBox />
+      <InputBox onChange={(e) => onChange(e.target.value)} />
     </InputFormLayout>
   );
 };

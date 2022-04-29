@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Layout } from '@/components/widgets';
 import { IconCloseWhite, IconAdd } from '@svg';
 import InputForm from './InputForm';
 import InputDate from './InputDate';
+import { ICertificationForm, ICertificationMenuType } from '@/interfaces';
 
 interface Iprops {
   isOpen: boolean;
+  clickCreateCertification: (form: ICertificationForm) => void;
   close: () => void;
 }
 
@@ -87,7 +89,61 @@ const InputDateLayout = styled.div`
   margin-top: 24px;
 `;
 
-const CertificationEditor: React.FC<Iprops> = ({ isOpen, close }) => {
+const CreateButtonLayout = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const CreateButton = styled.button`
+  padding: 12px 16px;
+  background-color: #2979ff;
+  border-radius: 8px;
+  font-size: 17px;
+  color: #fff;
+  margin-top: 24px;
+`;
+
+const PreviewImage = styled.img`
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+`;
+
+const CertificationEditor: React.FC<Iprops> = ({
+  isOpen,
+  clickCreateCertification,
+  close,
+}) => {
+  const [form, setForm] = useState<ICertificationForm>({
+    certification_title: '',
+  });
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
+    null
+  );
+
+  const selectImage = (image: File) => {
+    setForm({ ...form, certification_image: image });
+
+    getBase64(image, (res) => {
+      setImagePreview(res);
+    });
+  };
+
+  const getBase64 = (
+    file: File,
+    result: (res: string | ArrayBuffer | null) => void
+  ) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      result(reader.result);
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+  };
+
   return (
     <Layout.Dialog
       open={isOpen}
@@ -107,23 +163,47 @@ const CertificationEditor: React.FC<Iprops> = ({ isOpen, close }) => {
         <Title>신규등록</Title>
         <UploadImageLayout>
           <UploadLabel htmlFor="upload-image">
-            <UploadBox>
-              <PlusLayout>
-                <Plus>
-                  <IconAdd />
-                </Plus>
-                <div>사진업로드</div>
-              </PlusLayout>
-            </UploadBox>
+            {imagePreview ? (
+              <PreviewImage src={imagePreview as string} />
+            ) : (
+              <UploadBox>
+                <PlusLayout>
+                  <Plus>
+                    <IconAdd />
+                  </Plus>
+                  <div>사진업로드</div>
+                </PlusLayout>
+              </UploadBox>
+            )}
           </UploadLabel>
-          <Input type="file" accept="image/*" id="upload-image" />
+          <Input
+            type="file"
+            accept="image/*"
+            id="upload-image"
+            onChange={(e) => e.target.files && selectImage(e.target.files[0])}
+          />
         </UploadImageLayout>
         <InputLayout>
-          <InputForm title="인증명" />
+          <InputForm
+            title="인증명"
+            onChange={(value) =>
+              setForm({ ...form, certification_title: value })
+            }
+          />
         </InputLayout>
         <InputLayout>
-          <InputForm title="시험기관" />
+          <InputForm
+            title="시험기관"
+            onChange={(value) =>
+              setForm({ ...form, certification_organization: value })
+            }
+          />
         </InputLayout>
+        <CreateButtonLayout>
+          <CreateButton onClick={() => clickCreateCertification(form)}>
+            등록
+          </CreateButton>
+        </CreateButtonLayout>
         <InputDateLayout>
           <InputDate />
         </InputDateLayout>
