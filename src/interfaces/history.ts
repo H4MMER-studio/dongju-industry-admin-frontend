@@ -20,3 +20,17 @@ export interface IHistory {
 export interface IGetHistoryParams {
   isAsc: boolean;
 }
+
+export interface IPostHistoryParams {
+  history_year: string | number;
+  history_month: string | number;
+  history_content: string | number;
+}
+
+export interface IPatchHistoriesParams {
+  data: (Partial<IPostHistoryParams> & { history_id: string | number })[];
+}
+
+export interface IDeleteHistories {
+  data: (string | number)[];
+}

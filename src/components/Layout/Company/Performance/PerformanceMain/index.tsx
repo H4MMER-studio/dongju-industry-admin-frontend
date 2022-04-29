@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import * as S from './index.style';
-import { useDispatch } from 'react-redux';
 import { useGetStore } from '@/hooks';
+import { useDispatch } from 'react-redux';
 import { performanceActions } from '@/store';
+import { Images } from 'public/image';
 import { IconDownArrowSmall, IconSearch, IconDownArrowGray } from '@svg';
+import { IPostDelivery, ISelectedInfo } from '@/interfaces';
+import PerformanceItem from './PerformanceItem';
 
 interface IProps {
+  page: number;
   searchText: string;
   selectedOrder: string;
   modalOnAt: string;
@@ -16,9 +20,13 @@ interface IProps {
   onClickSetSelectedOrder(type: string): void;
   onChangeSearchText(text: string): void;
   onClickSetSelectedSearchTitle(type: string): void;
+  onClickPageHandler(page: number): void;
+  onClickDeleteDelivery(id: string | number): void;
+  onClickPatchDelivery(id: string | number, info: IPostDelivery): void;
 }
 
 const PerformanceMain: React.FC<IProps> = ({
+  page,
   searchText,
   selectedOrder,
   modalOnAt,
@@ -29,10 +37,17 @@ const PerformanceMain: React.FC<IProps> = ({
   onClickSetSelectedOrder,
   onChangeSearchText,
   onClickSetSelectedSearchTitle,
+  onClickPageHandler,
+  onClickDeleteDelivery,
+  onClickPatchDelivery,
 }) => {
   const [selectedRow, setSelectedRow] = useState<string | number | null>(null);
-  const { selectedInfo } = useGetStore.performance();
+  const { selectedInfo, deliveryList } = useGetStore.performance();
   const dispatch = useDispatch();
+
+  const onClickSetSelectedInfo = (info: ISelectedInfo | null) => {
+    dispatch(performanceActions.setSelectedInfo(info));
+  };
 
   return (
     <S.Container>
@@ -137,90 +152,53 @@ const PerformanceMain: React.FC<IProps> = ({
           <S.LongTitle>비고</S.LongTitle>
         </S.TitleWrapper>
         <div>
-          {Array(10)
-            .fill(0)
-            .map((_, index) => (
-              <S.ContentWrapper
-                key={index}
-                onMouseEnter={() => setSelectedRow(index)}
-              >
-                {selectedInfo?.id === index ? (
-                  <>
-                    <S.InputBox
-                      containerStyle={'margin-left: 12px;'}
-                      defaultValue={selectedInfo.shipName}
-                      width={1}
-                    />
-                    <S.InputBox defaultValue={selectedInfo.name} />
-                    <S.InputBox width={0.2} defaultValue={selectedInfo.count} />
-                    <S.SelectBox width={0.2}>
-                      {selectedInfo.year}
-                      <IconDownArrowGray />
-                    </S.SelectBox>
-                    <S.SelectBox width={0.2}>
-                      {selectedInfo.month}
-                      <IconDownArrowGray />
-                    </S.SelectBox>
-                    <S.InputBox width={0.74} defaultValue={selectedInfo.etc} />
-                  </>
-                ) : (
-                  <>
-                    <S.LongContent>(주)세진에스.이</S.LongContent>
-                    <S.LongContent>COOK FAN</S.LongContent>
-                    <S.ShortContent>3</S.ShortContent>
-                    <S.ShortContent>2012.2</S.ShortContent>
-                    <S.LongContent>연세대학교</S.LongContent>
-                  </>
-                )}
-                {selectedInfo?.id === index ? (
-                  <S.ModifyButtonWrapper>
-                    <S.ModifyButton
-                      onClick={() => {
-                        setSelectedRow(null);
-                        dispatch(performanceActions.setSelectedInfo(null));
-                      }}
-                    >
-                      취소
-                    </S.ModifyButton>
-                    <S.ModifyButton
-                      color="blue"
-                      onClick={() => {
-                        alert('저장 완료');
-                        dispatch(performanceActions.setSelectedInfo(null));
-                      }}
-                    >
-                      저장
-                    </S.ModifyButton>
-                  </S.ModifyButtonWrapper>
-                ) : (
-                  selectedRow === index && (
-                    <S.ModifyButtonWrapper>
-                      <S.ModifyButton>삭제</S.ModifyButton>
-                      <S.ModifyButton
-                        color="blue"
-                        onClick={() =>
-                          dispatch(
-                            performanceActions.setSelectedInfo({
-                              id: index,
-                              shipName: '(주)세진에스.이',
-                              name: 'COOK FAN',
-                              count: 3,
-                              year: 2012,
-                              month: 2,
-                              etc: '연세대학교',
-                            })
-                          )
-                        }
-                      >
-                        수정
-                      </S.ModifyButton>
-                    </S.ModifyButtonWrapper>
-                  )
-                )}
-              </S.ContentWrapper>
-            ))}
+          {deliveryList?.list?.map((info) => (
+            <PerformanceItem
+              key={info._id}
+              deliveryInfo={info}
+              selectedInfo={selectedInfo}
+              selectedRow={selectedRow}
+              onClickDeleteDelivery={onClickDeleteDelivery}
+              onClickPatchDelivery={onClickPatchDelivery}
+              onClickSetSelectedInfo={onClickSetSelectedInfo}
+              selectedRowHandler={(id: string | number | null) =>
+                setSelectedRow(id)
+              }
+            />
+          ))}
         </div>
       </S.TableContainer>
+      <S.PageNationLayout>
+        <S.ArrowIcon
+          onClick={() => {
+            if (page !== 1) {
+              onClickPageHandler(page - 1);
+            }
+          }}
+          src={Images.PagenationLeft}
+          style={{ marginRight: 20 }}
+        />
+        {Array(Math.round(deliveryList.size / 10))
+          .fill(0)
+          .map((_, index) => (
+            <S.PageNumber
+              isSelected={page === index + 1}
+              onClick={() => onClickPageHandler(index + 1)}
+            >
+              {index + 1}
+            </S.PageNumber>
+          ))}
+
+        <S.ArrowIcon
+          onClick={() => {
+            if (page !== Math.round(deliveryList.size / 10)) {
+              onClickPageHandler(page + 1);
+            }
+          }}
+          src={Images.PagenationRight}
+          style={{ marginLeft: 8 }}
+        />
+      </S.PageNationLayout>
     </S.Container>
   );
 };

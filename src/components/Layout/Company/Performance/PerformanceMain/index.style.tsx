@@ -124,6 +124,7 @@ export const TableContainer = styled.div`
   border-top: 1px solid #777777;
   border-bottom: 1px solid #777777;
   background: white;
+  margin-bottom: 24px;
 
   @media (max-width: 1682px) {
     margin-right: 12%;
@@ -233,6 +234,7 @@ export const SelectOrderBox = styled.div`
   position: absolute;
   top: 56px;
   left: 0;
+  z-index: 1000;
   width: 100%;
   padding: 18px 22px;
   background: #ffffff;
@@ -307,5 +309,29 @@ export const ModifyButton = styled.button<{ color?: string }>`
 
   &:last-child {
     margin-right: 0;
+  }
+`;
+
+export const PageNationLayout = styled.div`
+  ${mixins.flexSet()}
+  padding-bottom: 36px;
+`;
+
+export const ArrowIcon = styled.img`
+  cursor: pointer;
+`;
+
+export const PageNumber = styled.div<{ isSelected: boolean }>`
+  ${mixins.flexSet()}
+  width: 32px;
+  height: 32px;
+  background-color: ${(props) => (props.isSelected ? '#2979ff' : 'none')};
+  border-radius: 8px;
+  color: ${(props) => (props.isSelected ? '#fff' : '#383838')};
+  margin-right: 12px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => (props.isSelected ? 'none' : '#DFDFDF')};
   }
 `;

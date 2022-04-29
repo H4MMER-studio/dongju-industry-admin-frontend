@@ -1,13 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { performanceActions } from '@/store';
 import PerformanceMain from './PerformanceMain';
 import AddPerformance from './AddPerformance';
+import { IPostDelivery } from '@/interfaces';
+
+export type AddInfo = {
+  delivery_supplier: string;
+  delivery_product: string;
+  delivery_amount: string | number;
+  delivery_year: string | number;
+  delivery_month: string | number;
+  delivery_reference: string;
+};
 
 const Performance: React.FC = () => {
   const [selectedSearchTitle, setSelectedSearchTitle] = useState('납품처');
+  const [addInfo, setAddInfo] = useState<AddInfo>({
+    delivery_supplier: '',
+    delivery_product: '',
+    delivery_amount: '',
+    delivery_year: '2022',
+    delivery_month: '4',
+    delivery_reference: '',
+  });
+  const [page, setPage] = useState(1);
   const [modalOnAt, setModalOnAt] = useState('');
   const [searchText, setSearchText] = useState('');
   const [orderModalOn, setOrderModalOn] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState('new');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     document.onclick = onClickCloseModal;
@@ -16,6 +38,16 @@ const Performance: React.FC = () => {
       document.onmousedown = null;
     };
   }, []);
+
+  useEffect(() => {
+    dispatch(
+      performanceActions.getDeliveryList({
+        isAsc: selectedOrder !== 'new',
+        skip: 10 * page - 9,
+        limit: 10 * page,
+      })
+    );
+  }, [selectedOrder, page]);
 
   const onClickCloseModal = () => {
     setModalOnAt('');
@@ -31,7 +63,7 @@ const Performance: React.FC = () => {
   };
 
   const onClickSetSelectedOrder = (type: string) => {
-    setSelectedOrder(selectedOrder);
+    setSelectedOrder(type);
   };
 
   const onChangeSearchText = (text: string) => {
@@ -43,10 +75,36 @@ const Performance: React.FC = () => {
     setModalOnAt('');
   };
 
+  const onClickPageHandler = (page: number) => {
+    setPage(page);
+  };
+
+  const addInfoHandler = (type: keyof AddInfo, value: string | number) => {
+    setAddInfo((data) => {
+      return { ...data, [type]: value };
+    });
+  };
+
+  const onClickAddButton = () => {
+    dispatch(performanceActions.postDelivery(addInfo));
+  };
+
+  const onClickDeleteDelivery = (id: number | string) => {
+    dispatch(performanceActions.deleteDelivery({ id }));
+  };
+
+  const onClickPatchDelivery = (id: number | string, info: IPostDelivery) => {
+    dispatch(performanceActions.patchDelivery({ id, info }));
+  };
   return (
     <>
-      <AddPerformance />
+      <AddPerformance
+        addInfo={addInfo}
+        addInfoHandler={addInfoHandler}
+        onClickAddButton={onClickAddButton}
+      />
       <PerformanceMain
+        page={page}
         modalOnAt={modalOnAt}
         orderModalOn={orderModalOn}
         searchText={searchText}
@@ -57,6 +115,9 @@ const Performance: React.FC = () => {
         onClickSetSelectedOrder={onClickSetSelectedOrder}
         onChangeSearchText={onChangeSearchText}
         onClickSetSelectedSearchTitle={onClickSetSelectedSearchTitle}
+        onClickPageHandler={onClickPageHandler}
+        onClickDeleteDelivery={onClickDeleteDelivery}
+        onClickPatchDelivery={onClickPatchDelivery}
       />
     </>
   );

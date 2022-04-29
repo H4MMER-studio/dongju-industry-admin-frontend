@@ -8,7 +8,7 @@ export default function* rootSaga() {
   yield all([
     ...watchHome,
     ...watchPerformance,
-    watchHistory,
-    watchCertification,
+    ...watchHistory,
+    ...watchCertification,
   ]);
 }

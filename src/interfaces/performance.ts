@@ -4,7 +4,7 @@ export interface IPerformanceInitialState {
 }
 
 export interface ISelectedInfo {
-  id: number;
+  id: number | string;
   shipName: string;
   name: string;
   count: number;
@@ -30,4 +30,13 @@ export interface IGetDeliveryListParams {
   skip: number;
   limit: number;
   isAsc: boolean;
+}
+
+export interface IPostDelivery {
+  delivery_supplier: string;
+  delivery_product: string;
+  delivery_amount: number | string;
+  delivery_year: number | string;
+  delivery_month?: number | string;
+  delivery_reference?: string;
 }
