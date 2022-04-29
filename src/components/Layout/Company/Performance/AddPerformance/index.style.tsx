@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { mixins } from '@/styles';
 
-export const Container = styled.div`
+export const Container = styled.article`
   margin-right: 10%;
 
   h1 {

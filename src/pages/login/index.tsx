@@ -8,7 +8,6 @@ const LoginPage: NextPage = () => {
   const router = useRouter();
 
   const onClickSubmit = () => {
-    console.log(currentIdPw);
     router.push('/company/history');
   };
 

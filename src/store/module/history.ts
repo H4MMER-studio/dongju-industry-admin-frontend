@@ -1,5 +1,11 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IHistoryInitialState, IGetHistoryParams } from '@/interfaces';
+import {
+  IHistoryInitialState,
+  IGetHistoryParams,
+  IPostHistoryParams,
+  IPatchHistoriesParams,
+  IDeleteHistories,
+} from '@/interfaces';
 
 const initialState: IHistoryInitialState = {
   historyList: [],
@@ -16,6 +22,9 @@ const slice = createSlice({
       state.historyList = payload;
     },
     getHistoryList: (_, __: PayloadAction<IGetHistoryParams>) => {},
+    postHistory: (_, __: PayloadAction<IPostHistoryParams>) => {},
+    patchHistories: (_, __: PayloadAction<IPatchHistoriesParams>) => {},
+    deleteHistories: (_, __: PayloadAction<IDeleteHistories>) => {},
   },
 });
 

@@ -17,7 +17,7 @@ interface Iprops {
 
 const STDContainer = styled.main`
   padding-top: 48px;
-  margin: 0 36px;
+  padding: 48px 36px 36px;
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -120,21 +120,6 @@ const CompanyContainer: React.FC<Iprops> = ({
 
   return (
     <STDContainer>
-      {menu === 'history' && (
-        <BannerSection>
-          <BannerImage
-            src={
-              width > 1023
-                ? Images.CompanyInfoBannerLarge
-                : Images.CompanyInfoBannerSmall
-            }
-          />
-          <CenterLayout>
-            <BreadCrum>{`홈/회사/${displayTitle(menu)}`}</BreadCrum>
-            <Title>{displayTitle(menu)}</Title>
-          </CenterLayout>
-        </BannerSection>
-      )}
       {(() => {
         switch (menu) {
           case 'welcome':
