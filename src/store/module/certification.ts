@@ -2,6 +2,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ICertificationInitialState,
   ICertificationMenuType,
+  ICertificationForm,
 } from '@/interfaces';
 
 const initialState: ICertificationInitialState = {
@@ -20,7 +21,8 @@ const slice = createSlice({
     ) => {
       state.certificationList = payload;
     },
-    getCertificationList: (_, __: PayloadAction<ICertificationMenuType>) => {},
+    getCertificationList: (_, __: PayloadAction) => {},
+    createCertification: (_, __: PayloadAction<ICertificationForm>) => {},
   },
 });
 

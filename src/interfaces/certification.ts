@@ -36,3 +36,12 @@ export interface ICertificationImage {
   name: string;
   url: string;
 }
+
+export interface ICertificationForm {
+  certification_title: string;
+  certification_type?: ICertificationMenuType;
+  certification_organization?: string;
+  certification_image?: string;
+  certification_start_date: string | null;
+  certification_end_date: string | null;
+}
