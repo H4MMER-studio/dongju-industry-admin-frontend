@@ -40,8 +40,6 @@ export function* createCertificationSaga({
     formData.append('certification_end_date', payload.certification_end_date);
   }
 
-  console.log(formData, '폼데이터');
-
   try {
     yield call(
       API.POST,
