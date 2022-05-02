@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Fade from '@mui/material/Fade';
+import { ICertificationForm } from '@/interfaces';
+
+interface IProps {
+  setStartDate: (startDate: string | null) => void;
+  setEndDate: (endDate: string | null) => void;
+}
 
 const Title = styled.div`
   font-size: 15px;
@@ -77,7 +83,7 @@ const FlexLayout = styled.div`
   justify-content: space-between;
 `;
 
-const DatePicker: React.VFC = () => {
+const DatePicker: React.VFC<IProps> = (props) => {
   const [selectedStartYear, setSelectedStartYear] = useState<string | null>(
     null
   );
@@ -234,30 +240,46 @@ const DatePicker: React.VFC = () => {
     setSelectedEndYear(null);
     setSelectedEndMonth(null);
     setSelectedEndDate(null);
+    props.setStartDate(null);
+    props.setEndDate(null);
   };
 
   const clickStartMonth = (month: string) => {
     setSelectedStartMonth(month);
     setSelectedStartDate(null);
+    props.setStartDate(null);
   };
 
   const clickStartDate = (date: string) => {
     setSelectedStartDate(date);
+
+    if (selectedStartYear && selectedStartMonth && selectedStartDate) {
+      const startDate =
+        selectedStartYear + selectedStartMonth + selectedStartDate;
+      props.setStartDate(startDate);
+    }
   };
 
   const clickEndYear = (year: string) => {
     setSelectedEndYear(year);
     setSelectedEndMonth(null);
     setSelectedEndDate(null);
+    props.setEndDate(null);
   };
 
   const clickEndMonth = (month: string) => {
     setSelectedEndMonth(month);
     setSelectedEndDate(null);
+    props.setEndDate(null);
   };
 
   const clickEndDate = (date: string) => {
     setSelectedEndDate(date);
+
+    if (selectedEndYear && selectedEndMonth && selectedEndDate) {
+      const endDate = selectedEndYear + selectedEndMonth + selectedEndDate;
+      props.setEndDate(endDate);
+    }
   };
 
   return (

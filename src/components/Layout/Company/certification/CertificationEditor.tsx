@@ -5,7 +5,7 @@ import { IconCloseWhite, IconAdd } from '@svg';
 import InputForm from './InputForm';
 import InputDate from './InputDate';
 import DatePicker from './DatePicker';
-import { ICertificationForm, ICertificationMenuType } from '@/interfaces';
+import { ICertificationForm } from '@/interfaces';
 
 interface Iprops {
   isOpen: boolean;
@@ -96,9 +96,9 @@ const CreateButtonLayout = styled.div`
   justify-content: center;
 `;
 
-const CreateButton = styled.button`
+const CreateButton = styled.button<{ isActive: boolean }>`
   padding: 12px 16px;
-  background-color: #2979ff;
+  background-color: ${(props) => (props.isActive ? '#2979ff' : '#E8E8E8')};
   border-radius: 8px;
   font-size: 17px;
   color: #fff;
@@ -118,16 +118,19 @@ const CertificationEditor: React.FC<Iprops> = ({
 }) => {
   const [form, setForm] = useState<ICertificationForm>({
     certification_title: '',
+    certification_start_date: null,
+    certification_end_date: null,
   });
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(
     null
   );
 
   const selectImage = (image: File) => {
-    setForm({ ...form, certification_image: image });
+    // setForm({ ...form, certification_image: JSON.stringify(image) });
 
     getBase64(image, (res) => {
       setImagePreview(res);
+      setForm({ ...form, certification_image: res as string });
     });
   };
 
@@ -201,9 +204,27 @@ const CertificationEditor: React.FC<Iprops> = ({
             }
           />
         </InputLayout>
-        <DatePicker />
+        <DatePicker
+          setStartDate={(startDate) =>
+            setForm({ ...form, certification_start_date: startDate })
+          }
+          setEndDate={(endDate) =>
+            setForm({ ...form, certification_end_date: endDate })
+          }
+        />
         <CreateButtonLayout>
-          <CreateButton onClick={() => clickCreateCertification(form)}>
+          <CreateButton
+            isActive={
+              form.certification_title && form.certification_image
+                ? true
+                : false
+            }
+            onClick={() =>
+              form.certification_title &&
+              form.certification_image &&
+              clickCreateCertification(form)
+            }
+          >
             등록
           </CreateButton>
         </CreateButtonLayout>

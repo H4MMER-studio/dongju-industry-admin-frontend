@@ -119,9 +119,9 @@ const Certification: React.FC<Iprops> = ({
     <SDTCertificationLayout>
       <Title>인증서 추가</Title>
       {sortCertificationList(certificationList.data).map(
-        (sortedCertification) => {
+        (sortedCertification, i) => {
           return (
-            <ListLayout>
+            <ListLayout key={i}>
               <ItemTitle>
                 {setTitle(sortedCertification[0]?.certification_type)}
               </ItemTitle>
