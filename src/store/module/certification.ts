@@ -21,7 +21,7 @@ const slice = createSlice({
     ) => {
       state.certificationList = payload;
     },
-    getCertificationList: (_, __: PayloadAction<ICertificationMenuType>) => {},
+    getCertificationList: (_, __: PayloadAction) => {},
     createCertification: (_, __: PayloadAction<ICertificationForm>) => {},
   },
 });

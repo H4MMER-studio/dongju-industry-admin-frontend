@@ -4,6 +4,7 @@ import { Layout } from '@/components/widgets';
 import { IconCloseWhite, IconAdd } from '@svg';
 import InputForm from './InputForm';
 import InputDate from './InputDate';
+import DatePicker from './DatePicker';
 import { ICertificationForm, ICertificationMenuType } from '@/interfaces';
 
 interface Iprops {
@@ -155,6 +156,7 @@ const CertificationEditor: React.FC<Iprops> = ({
           overflow: 'visible',
         },
       }}
+      maxWidth={false}
     >
       <CloseIcon onClick={close}>
         <IconCloseWhite />
@@ -199,6 +201,7 @@ const CertificationEditor: React.FC<Iprops> = ({
             }
           />
         </InputLayout>
+        <DatePicker />
         <CreateButtonLayout>
           <CreateButton onClick={() => clickCreateCertification(form)}>
             등록

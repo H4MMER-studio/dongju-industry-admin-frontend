@@ -53,34 +53,85 @@ const Certification: React.FC<Iprops> = ({
   const { certificationList } = useGetStore.certification();
 
   useEffect(() => {
-    dispatch(certificationActions.getCertificationList('core-certification'));
+    dispatch(certificationActions.getCertificationList());
   }, []);
 
   const clickCreateCertification = (certificationForm: ICertificationForm) => {
-    // const formData = new FormData();
-    // console.log('왜 안눌림?');
-    // formData.append('certification_title', '등록증 제목');
-
     certificationForm.certification_type = openEditor!;
     dispatch(certificationActions.createCertification(certificationForm));
   };
 
-  return (
-    <>
-      <SDTCertificationLayout>
-        <Title>인증서 추가</Title>
+  const sortCertificationList = (
+    certificationList: ICertification[]
+  ): ICertification[][] => {
+    const licenseList: ICertification[] = [];
+    const coreCertificationList: ICertification[] = [];
+    const patentList: ICertification[] = [];
+    const testResultList: ICertification[] = [];
 
-        {CERTIFICATION_TYPE_LIST.map((v) => {
+    certificationList.forEach((certification) => {
+      switch (certification.certification_type) {
+        case 'license':
+          licenseList.push(certification);
+          break;
+        case 'core-certification':
+          coreCertificationList.push(certification);
+          break;
+        case 'patent':
+          patentList.push(certification);
+          break;
+        case 'test-result':
+          testResultList.push(certification);
+          break;
+
+        default:
+          break;
+      }
+    });
+
+    const result = [
+      licenseList,
+      coreCertificationList,
+      patentList,
+      testResultList,
+    ];
+
+    return result;
+  };
+
+  const setTitle = (type: ICertificationMenuType) => {
+    switch (type) {
+      case 'license':
+        return '등록증';
+
+      case 'core-certification':
+        return '주요인증';
+
+      case 'patent':
+        return '특허증';
+
+      case 'test-result':
+        return '시험성적서';
+    }
+  };
+
+  return (
+    <SDTCertificationLayout>
+      <Title>인증서 추가</Title>
+      {sortCertificationList(certificationList.data).map(
+        (sortedCertification) => {
           return (
             <ListLayout>
-              <ItemTitle>{v.name}</ItemTitle>
+              <ItemTitle>
+                {setTitle(sortedCertification[0]?.certification_type)}
+              </ItemTitle>
               <CertificationItemLayout>
-                {certificationList.data.map((certification, i) => {
+                {sortedCertification.map((certification, i) => {
                   return (
                     <CertificationItem
                       title={certification.certification_type}
                       images={certification.certification_images}
-                      isLast={certificationList.data.length - 1 === i}
+                      isLast={sortedCertification.length - 1 === i}
                       clickAddCertification={() =>
                         setOpenEditor(certification.certification_type)
                       }
@@ -91,15 +142,14 @@ const Certification: React.FC<Iprops> = ({
               </CertificationItemLayout>
             </ListLayout>
           );
-        })}
-
-        <CertificationEditor
-          isOpen={openEditor !== null}
-          clickCreateCertification={clickCreateCertification}
-          close={() => setOpenEditor(null)}
-        />
-      </SDTCertificationLayout>
-    </>
+        }
+      )}
+      <CertificationEditor
+        isOpen={openEditor !== null}
+        clickCreateCertification={clickCreateCertification}
+        close={() => setOpenEditor(null)}
+      />
+    </SDTCertificationLayout>
   );
 };
 
