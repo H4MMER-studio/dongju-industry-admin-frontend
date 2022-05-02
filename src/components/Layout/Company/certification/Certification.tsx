@@ -12,11 +12,6 @@ import { useDispatch } from 'react-redux';
 import { useGetStore } from '@/hooks';
 import { certificationActions } from '@/store';
 
-interface Iprops {
-  certifications: ICertification[];
-  clickCertificationTypeMenu: (type: certificationMenuType) => void;
-}
-
 const SDTCertificationLayout = styled.section``;
 
 const Title = styled.div`
@@ -42,10 +37,7 @@ const CertificationItemLayout = styled.div`
   align-items: center;
 `;
 
-const Certification: React.FC<Iprops> = ({
-  certifications,
-  clickCertificationTypeMenu,
-}) => {
+const Certification: React.FC = () => {
   const [openEditor, setOpenEditor] = useState<ICertificationMenuType | null>(
     null
   );

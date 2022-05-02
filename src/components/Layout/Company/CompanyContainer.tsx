@@ -132,12 +132,7 @@ const CompanyContainer: React.FC<Iprops> = ({
             return <WayToCome />;
 
           case 'certification':
-            return (
-              <Certification
-                certifications={[{ id: 'aa', title: '인증서', images: [] }]}
-                clickCertificationTypeMenu={clickCertificationTypeMenu}
-              />
-            );
+            return <Certification />;
           case 'performance':
             return <Performance />;
 
