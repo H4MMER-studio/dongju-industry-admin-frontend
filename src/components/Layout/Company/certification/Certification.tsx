@@ -123,6 +123,7 @@ const Certification: React.FC = () => {
                     <CertificationItem
                       title={certification.certification_type}
                       images={certification.certification_images}
+                      certificationId={certification._id}
                       isLast={sortedCertification.length - 1 === i}
                       clickAddCertification={() =>
                         setOpenEditor(certification.certification_type)
