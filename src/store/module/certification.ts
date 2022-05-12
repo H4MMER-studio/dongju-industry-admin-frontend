@@ -23,6 +23,7 @@ const slice = createSlice({
     },
     getCertificationList: (_, __: PayloadAction) => {},
     createCertification: (_, __: PayloadAction<ICertificationForm>) => {},
+    deleteCertification: (_, __: PayloadAction<{ id: string }>) => {},
   },
 });
 

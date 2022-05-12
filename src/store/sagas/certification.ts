@@ -54,6 +54,17 @@ export function* createCertificationSaga({
   }
 }
 
+export function* deleteCertificationSaga({
+  payload,
+}: ActionType & { payload: { id: string } }) {
+  try {
+    yield call(API.DELETE, `${CERTIFICATION_API}/${payload.id}`);
+    // getCertificationListSaga({});
+  } catch (error) {
+    alert('삭제 실패');
+  }
+}
+
 export function* watchCertificationList() {
   yield takeEvery(
     certificationActions.getCertificationList,
@@ -68,9 +79,18 @@ export function* watchCreateCertification() {
   );
 }
 
-export default [watchCertificationList, watchCreateCertification].map((fn) =>
-  fn()
-);
+export function* watchDeleteCertification() {
+  yield takeEvery(
+    certificationActions.deleteCertification,
+    deleteCertificationSaga
+  );
+}
+
+export default [
+  watchCertificationList,
+  watchCreateCertification,
+  watchDeleteCertification,
+].map((fn) => fn());
 
 const b64toBlob = (dataURI) => {
   var byteString = atob(dataURI.split(',')[1]);

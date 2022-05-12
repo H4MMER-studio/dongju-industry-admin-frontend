@@ -10,6 +10,7 @@ interface IProps {
   certificationId: string;
   isLast: boolean;
   clickAddCertification: () => void;
+  clickDeleteCertification: () => void;
 }
 
 const CertificationEditorLayout = styled.div`
@@ -180,7 +181,12 @@ const CertificationItem: React.VFC<IProps> = (props) => {
           <DeleteModalTitle>삭제 하시겠습니까?</DeleteModalTitle>
           <DeleteModalButtonLayout>
             <div onClick={() => setOpenDeleteModal(false)}>취소</div>
-            <div className="confirm-delete">삭제</div>
+            <div
+              className="confirm-delete"
+              onClick={props.clickDeleteCertification}
+            >
+              삭제
+            </div>
           </DeleteModalButtonLayout>
         </DeleteModalLayout>
       </Layout.Dialog>

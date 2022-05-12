@@ -53,6 +53,10 @@ const Certification: React.FC = () => {
     dispatch(certificationActions.createCertification(certificationForm));
   };
 
+  const clickDeleteCertification = (certificationId: string) => {
+    dispatch(certificationActions.deleteCertification({ id: certificationId }));
+  };
+
   const sortCertificationList = (
     certificationList: ICertification[]
   ): ICertification[][] => {
@@ -127,6 +131,9 @@ const Certification: React.FC = () => {
                       isLast={sortedCertification.length - 1 === i}
                       clickAddCertification={() =>
                         setOpenEditor(certification.certification_type)
+                      }
+                      clickDeleteCertification={() =>
+                        clickDeleteCertification(certification._id)
                       }
                       key={certification._id}
                     />
