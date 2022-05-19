@@ -7,6 +7,7 @@ import {
 
 const initialState: ICertificationInitialState = {
   certificationList: { data: [], size: 0 },
+  isSuccess: false,
 };
 
 const slice = createSlice({
@@ -21,6 +22,9 @@ const slice = createSlice({
     ) => {
       state.certificationList = payload;
     },
+    setIsSuccess: (state, { payload }: PayloadAction<boolean>) => {
+      state.isSuccess = payload;
+    },
     getCertificationList: (_, __: PayloadAction) => {},
     createCertification: (_, __: PayloadAction<ICertificationForm>) => {},
     deleteCertification: (_, __: PayloadAction<{ id: string }>) => {},
@@ -29,9 +33,11 @@ const slice = createSlice({
 
 export const selectCertificationState = createSelector(
   (state: ICertificationInitialState) => state.certificationList,
-  (certificationList) => {
+  (state: ICertificationInitialState) => state.isSuccess,
+  (certificationList, isSuccess) => {
     return {
       certificationList,
+      isSuccess,
     };
   }
 );

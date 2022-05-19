@@ -47,6 +47,8 @@ export function* createCertificationSaga({
       { bodyData: formData },
       'form'
     );
+    yield call(getCertificationListSaga, {});
+    yield put(certificationActions.setIsSuccess(true));
     alert('생성 완료');
   } catch (error) {
     console.log(error);
@@ -59,7 +61,8 @@ export function* deleteCertificationSaga({
 }: ActionType & { payload: { id: string } }) {
   try {
     yield call(API.DELETE, `${CERTIFICATION_API}/${payload.id}`);
-    // getCertificationListSaga({});
+    yield call(getCertificationListSaga, {});
+    alert('삭제 성공');
   } catch (error) {
     alert('삭제 실패');
   }

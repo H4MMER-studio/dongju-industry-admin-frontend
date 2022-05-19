@@ -1,5 +1,6 @@
 export interface ICertificationInitialState {
   certificationList: ICertificationList;
+  isSuccess: boolean;
 }
 
 export interface ICertificationList {

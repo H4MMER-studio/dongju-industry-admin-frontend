@@ -42,11 +42,18 @@ const Certification: React.FC = () => {
     null
   );
   const dispatch = useDispatch();
-  const { certificationList } = useGetStore.certification();
+  const { certificationList, isSuccess } = useGetStore.certification();
 
   useEffect(() => {
     dispatch(certificationActions.getCertificationList());
   }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setOpenEditor(null);
+      dispatch(certificationActions.setIsSuccess(false));
+    }
+  }, [isSuccess]);
 
   const clickCreateCertification = (certificationForm: ICertificationForm) => {
     certificationForm.certification_type = openEditor!;
