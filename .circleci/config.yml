@@ -13,7 +13,7 @@ commands:
           node-version: "16.13"
       - run:
           name: Install dependencies
-          command: yarn install
+          command: yarn install --frozen-lockfile
       - run:
           name: Build source code
           command: yarn build
