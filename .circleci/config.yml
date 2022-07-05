@@ -1,0 +1,61 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+  slack: circleci/slack@4.10.1
+  aws-cli: circleci/aws-cli@3.1.1
+
+commands:
+  build_source_code:
+    steps:
+      - node/install:
+          install-yarn: true
+          node-version: "16.13"
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile
+      - run:
+          name: Build source code
+          command: yarn build
+
+  deploy_source_code:
+    steps:
+      - aws-cli/setup
+      - run:
+          name: Deploye source code to AWS S3
+          command: aws s3 sync ./${BUILD_DIRECTORY} ${AWS_S3_BUCKET_NAME} --acl public-read --delete
+      - run:
+          name: AWS CloudFront invalidate cache
+          command: aws cloudfront create-invalidation --distribution-id ${AWS_CLOUDFRONT_DISTRIBUTION_ID} --paths '/*'
+
+  notify_slack_pass:
+    steps:
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+
+  notify_slack_error:
+    steps:
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
+jobs:
+  deploy:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - checkout
+      - build_source_code
+      - deploy_source_code
+      - notify_slack_pass
+      - notify_slack_error
+
+workflows:
+  ci-cd:
+    jobs:
+      - deploy:
+          context: frontend-slack-secrets
+          filters:
+            branches:
+              only: develop
