@@ -1,38 +1,47 @@
-import React from 'react';
-import styled from 'styled-components';
-import * as NoticeComponents from './components';
+import React from "react";
+import styled from "styled-components";
+import * as NoticeComponents from "./components";
 
 interface IProps {
-  clickNoticeItem: (id: string) => void;
+    clickNoticeItem: (id: string) => void;
+    clickAddNotice: () => void;
 }
 
-const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem }) => {
-  return (
-    <NoticeContainerLayout>
-      <Title>공지사항</Title>
-      <ListLayout>
-        <NoticeComponents.Item
-          title={'IFB동파 방지'}
-          date={'2020.01.26'}
-          clickNoticeItem={() => clickNoticeItem('id')}
-        />
-      </ListLayout>
-    </NoticeContainerLayout>
-  );
-};
-
-export default NoticeContainer;
-
 const NoticeContainerLayout = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 32px;
+    width: 100%;
+    height: 100%;
+    padding: 32px;
 `;
 
 const Title = styled.div`
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 16px;
+    font-size: 24px;
+    font-weight: 700;
+    margin-right: 28px;
 `;
 
 const ListLayout = styled.div``;
+
+const TitleLayout = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const AddContentsTextButton = styled.div`
+    font-size: 17px;
+    color: #2979ff;
+    cursor: pointer;
+    font-weight: 600;
+`;
+
+const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem, clickAddNotice }) => {
+    return (
+        <NoticeContainerLayout>
+            <TitleLayout>
+                <Title>공지사항</Title>
+                <AddContentsTextButton onClick={clickAddNotice}>게시물 작성</AddContentsTextButton>
+            </TitleLayout>
+        </NoticeContainerLayout>
+    );
+};
+
+export default NoticeContainer;
