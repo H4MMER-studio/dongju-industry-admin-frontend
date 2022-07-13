@@ -9,8 +9,8 @@ interface IProps {
 }
 
 const CKEditor: React.FC<IProps> = ({ onChange, editorLoaded, name, value }) => {
-    const editorRef = useRef();
-    const { CKEditor, ClassicEditor } = editorRef.current || {};
+    const editorRef: any = useRef();
+    const { CKEditor, ClassicEditor }: any = editorRef.current || {};
 
     useEffect(() => {
         editorRef.current = {

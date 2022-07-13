@@ -16,6 +16,7 @@ const EditorContainer: React.FC = () => {
         <EditorContainerLayout>
             <CKEditor
                 name="description"
+                value=""
                 onChange={(data) => {
                     setData(data);
                 }}
