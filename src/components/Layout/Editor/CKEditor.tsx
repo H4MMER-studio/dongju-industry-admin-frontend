@@ -8,6 +8,12 @@ interface IProps {
     onChange: (data: any) => void;
 }
 
+const CkEditorLayout = styled.div`
+    width: 100%;
+    max-width: 765px;
+    padding-right: 24px;
+`;
+
 const CKEditor: React.FC<IProps> = ({ onChange, editorLoaded, name, value }) => {
     const editorRef: any = useRef();
     const { CKEditor, ClassicEditor }: any = editorRef.current || {};
@@ -20,7 +26,7 @@ const CKEditor: React.FC<IProps> = ({ onChange, editorLoaded, name, value }) => 
     }, []);
 
     return (
-        <div>
+        <CkEditorLayout>
             {editorLoaded ? (
                 <CKEditor
                     type=""
@@ -29,14 +35,14 @@ const CKEditor: React.FC<IProps> = ({ onChange, editorLoaded, name, value }) => 
                     data={value}
                     onChange={(event, editor) => {
                         const data = editor.getData();
-                        // console.log({ event, editor, data })
+                        console.log({ data });
                         onChange(data);
                     }}
                 />
             ) : (
                 <div>Editor loading</div>
             )}
-        </div>
+        </CkEditorLayout>
     );
 };
 
