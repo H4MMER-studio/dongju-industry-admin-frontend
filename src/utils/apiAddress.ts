@@ -5,3 +5,4 @@ export const HISTORIES_API = '/histories';
 export const HISTORY_API = '/history';
 export const DELIVERY_LIST_API = '/deliveries';
 export const DELIVERY_API = '/delivery';
+export const LOGIN_API = '/admin/sign-in';

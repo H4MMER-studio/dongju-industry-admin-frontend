@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { NextPage } from 'next';
 import { Login } from '@/components';
+import { homeActions } from '@/store';
+import { idText } from 'typescript';
 
 const LoginPage: NextPage = () => {
   const [currentIdPw, setCurrentIdPw] = useState({ id: '', pw: '' });
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const onClickSubmit = () => {
-    router.push('/company/history');
+    dispatch(
+      homeActions.postLogin({
+        admin_id: currentIdPw.id,
+        admin_password: currentIdPw.pw,
+      })
+    );
   };
 
   const onChangeSetCurrentIdPw = (type: 'id' | 'pw', value: string) => {

@@ -45,17 +45,17 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html lang="ko">
+      <Html lang='ko'>
         <Head>
           <link
-            rel="stylesheet"
-            type="text/css"
-            charSet="UTF-8"
-            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+            rel='stylesheet'
+            type='text/css'
+            charSet='UTF-8'
+            href='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'
           />
           <script
-            type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0230e081e91dc95d605b7a918f56669a"
+            type='text/javascript'
+            src='//dapi.kakao.com/v2/maps/sdk.js?appkey=0230e081e91dc95d605b7a918f56669a'
           ></script>
         </Head>
         <body>

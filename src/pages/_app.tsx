@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { ConnectedRouter } from 'connected-next-router';
 import { MainNav, Footer } from '@/components';
 import { AppProps } from 'next/app';
 import withReduxSaga from 'next-redux-saga';
@@ -45,6 +46,13 @@ function App({ Component, pageProps }: AppProps) {
   };
   const { height } = useResize();
 
+  useEffect(() => {
+    const dongjuAdminToken = localStorage.getItem('dongju-admin-token');
+    if (!dongjuAdminToken) {
+      router.push('/login');
+    }
+  }, []);
+
   const onClickMenu = (menu: string) => {
     router.push(`/${menu}`);
   };
@@ -74,25 +82,27 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Head>
-        <title>동주산업</title>
-      </Head>
-      <CssBaseline />
-      <STDContainer height={height}>
-        {selectedMenu !== '/login' && (
-          <MainNav
-            selectedMenu={selectedMenu}
-            params={params}
-            onClickMenu={onClickMenu}
-            onClickProduct={onClickProduct}
-            onClickNoticeMenu={onClickNoticeMenu}
-            onClickCompanyMenu={onClickCompanyMenu}
-            onClickCustomerMenu={onClickCustomerMenu}
-          />
-        )}
-        <Component {...pageProps} />
-      </STDContainer>
-      {selectedMenu === '/' && <Footer />}
+      <ConnectedRouter>
+        <Head>
+          <title>동주산업</title>
+        </Head>
+        <CssBaseline />
+        <STDContainer height={height}>
+          {selectedMenu !== '/login' && (
+            <MainNav
+              selectedMenu={selectedMenu}
+              params={params}
+              onClickMenu={onClickMenu}
+              onClickProduct={onClickProduct}
+              onClickNoticeMenu={onClickNoticeMenu}
+              onClickCompanyMenu={onClickCompanyMenu}
+              onClickCustomerMenu={onClickCustomerMenu}
+            />
+          )}
+          <Component {...pageProps} />
+        </STDContainer>
+        {selectedMenu === '/' && <Footer />}
+      </ConnectedRouter>
     </>
   );
 }

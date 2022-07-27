@@ -1,4 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
+import { routerReducer } from 'connected-next-router';
 import home from './module/home';
 import performance from './module/performance';
 import history from './module/history';
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
   performance,
   history,
   certification,
+  router: routerReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

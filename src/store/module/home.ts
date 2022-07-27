@@ -1,5 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IHomeInitialState } from '@/interfaces';
+import { IPostLoginParams, IHomeInitialState } from '@/interfaces';
 
 const initialState: IHomeInitialState = {
   selectedMenu: '제품',
@@ -12,7 +12,7 @@ const slice = createSlice({
     setSelectedMenu: (state, { payload }: PayloadAction<string>) => {
       state.selectedMenu = payload;
     },
-    getData: (_, __) => {},
+    postLogin: (_, __: PayloadAction<IPostLoginParams>) => {},
   },
 });
 

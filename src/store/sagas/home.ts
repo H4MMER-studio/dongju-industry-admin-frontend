@@ -1,16 +1,27 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { API, TEST_API } from '@/utils';
+import { API, LOGIN_API } from '@/utils';
 import { homeActions } from '../module/home';
+import { ActionType, IPostLoginParams } from '@/interfaces';
+import { push } from 'connected-next-router';
 
-export function* testSaga() {
+export function* postLoginSaga({
+  payload,
+}: ActionType & { payload: IPostLoginParams }) {
   try {
+    const token: { data: string } = yield call(API.POST, LOGIN_API, {
+      bodyData: payload,
+    });
+    localStorage.setItem('dongju-admin-token', token.data);
+    alert('환영합니다.');
+    yield put(push('/'));
   } catch (error) {
     console.error(error);
+    alert('아이디 비밀번호를 확인해주세요.');
   }
 }
 
-export function* watchTestSaga() {
-  yield takeEvery(homeActions.getData, testSaga);
+export function* watchPostLogin() {
+  yield takeEvery(homeActions.postLogin, postLoginSaga);
 }
 
-export default [watchTestSaga].map((fn) => fn());
+export default [watchPostLogin].map((fn) => fn());
