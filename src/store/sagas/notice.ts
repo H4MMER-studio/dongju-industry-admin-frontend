@@ -1,16 +1,16 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { ActionType, INotice, IGetNoticeParams } from "@/interfaces";
-import { API, NOTIFICATIONS_API } from "@/utils";
-import { notificationActions } from "../module/notice";
+import { API, NOTICES_API } from "@/utils";
+import { noticeActions } from "../module/notice";
 
 export function* getNoticeListSage({ payload }: ActionType & { payload: IGetNoticeParams }) {
     try {
         const notificationList: INotice[] = yield call(
             API.GET,
-            `${NOTIFICATIONS_API}?value=${payload.value}&skip=${payload.skip}&limit=${payload.limit}&sort=${payload.sort}`
+            `${NOTICES_API}?value=${payload.value}&skip=${payload.skip}&limit=${payload.limit}&sort=${payload.sort}`
         );
 
-        yield put(notificationActions.setNotificationList(notificationList));
+        yield put(noticeActions.setNotificationList(notificationList));
     } catch (error) {
         console.log("get notifications error: ", error);
     }
@@ -18,7 +18,7 @@ export function* getNoticeListSage({ payload }: ActionType & { payload: IGetNoti
 
 //watch
 export function* watchGetNoticeList() {
-    yield takeEvery(notificationActions.getNoticeList, getNoticeListSage);
+    yield takeEvery(noticeActions.getNoticeList, getNoticeListSage);
 }
 
 export default [watchGetNoticeList].map((fn) => fn());

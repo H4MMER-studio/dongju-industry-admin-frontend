@@ -6,7 +6,7 @@ const initialState: INotificationInitialState = {
 };
 
 const slice = createSlice({
-    name: "notificationReducer",
+    name: "noticeReducer",
     initialState,
     reducers: {
         setNotificationList: (state, { payload }: PayloadAction<INotificationInitialState["noticeList"]>) => {
@@ -16,17 +16,17 @@ const slice = createSlice({
     },
 });
 
-export const selectNotificationState = createSelector(
+export const selectNoticeState = createSelector(
     (state: INotificationInitialState) => state.noticeList,
-    (certificationList) => {
+    (noticeList) => {
         return {
-            certificationList,
+            noticeList,
         };
     }
 );
 
-export const notification = slice.name;
-export const notificationReducer = slice.reducer;
-export const notificationActions = slice.actions;
+export const notice = slice.name;
+export const noticeReducer = slice.reducer;
+export const noticeActions = slice.actions;
 
-export default notificationReducer;
+export default noticeReducer;

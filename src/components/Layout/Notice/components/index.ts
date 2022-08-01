@@ -1,3 +1,4 @@
-import Item from './Item';
+import Item from "./Item";
+import NoticeListTable from "./NoticeListTable";
 
-export { Item };
+export { NoticeListTable, Item };

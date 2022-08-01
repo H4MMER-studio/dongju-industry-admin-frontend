@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import * as NoticeComponents from "./components";
+import { useDispatch } from "react-redux";
+import { noticeActions, certificationActions } from "@/store";
+import { useGetStore } from "@/hooks";
 
 interface IProps {
     clickNoticeItem: (id: string) => void;
@@ -34,12 +37,21 @@ const AddContentsTextButton = styled.div`
 `;
 
 const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem, clickAddNotice }) => {
+    const dispatch = useDispatch();
+    const { noticeList } = useGetStore.notice();
+
+    useEffect(() => {
+        dispatch(noticeActions.getNoticeList({ value: "notification", skip: 0, limit: 10, sort: "created-at desc" }));
+        dispatch(certificationActions.getCertificationList());
+    }, []);
+
     return (
         <NoticeContainerLayout>
             <TitleLayout>
                 <Title>공지사항</Title>
                 <AddContentsTextButton onClick={clickAddNotice}>게시물 작성</AddContentsTextButton>
             </TitleLayout>
+            <NoticeComponents.NoticeListTable />
         </NoticeContainerLayout>
     );
 };
