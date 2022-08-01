@@ -1,16 +1,11 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import * as NoticeComponents from "./components";
 import { useDispatch } from "react-redux";
 import { noticeActions } from "@/store";
 import { useGetStore } from "@/hooks";
+import * as Archives from "./components";
 
-interface IProps {
-    clickNoticeItem: (id: string) => void;
-    clickAddNotice: () => void;
-}
-
-const NoticeContainerLayout = styled.div`
+const ArchivesContainerLayout = styled.div`
     width: 100%;
     height: 100%;
     padding: 32px;
@@ -36,25 +31,25 @@ const AddContentsTextButton = styled.div`
     font-weight: 600;
 `;
 
-const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem, clickAddNotice }) => {
+const ArchivesContainer: React.FC = () => {
     const dispatch = useDispatch();
-    const { noticeList } = useGetStore.notice();
+    const { archiveList } = useGetStore.notice();
 
     useEffect(() => {
-        dispatch(noticeActions.getNoticeList({ value: "notification", skip: 1, limit: 30, sort: "created-at desc" }));
+        dispatch(noticeActions.getNoticeList({ value: "archive", skip: 1, limit: 30, sort: "created-at desc" }));
     }, []);
 
-    console.log("이건가?", noticeList);
+    console.log("자료실 데이터", archiveList);
 
     return (
-        <NoticeContainerLayout>
+        <ArchivesContainerLayout>
             <TitleLayout>
                 <Title>공지사항</Title>
-                <AddContentsTextButton onClick={clickAddNotice}>게시물 작성</AddContentsTextButton>
+                <AddContentsTextButton>게시물 작성</AddContentsTextButton>
             </TitleLayout>
-            <NoticeComponents.NoticeListTable />
-        </NoticeContainerLayout>
+            <Archives.ArchiveListTable list={archiveList.data} />
+        </ArchivesContainerLayout>
     );
 };
 
-export default NoticeContainer;
+export default ArchivesContainer;

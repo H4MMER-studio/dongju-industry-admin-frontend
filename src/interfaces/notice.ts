@@ -1,5 +1,6 @@
 export interface INotificationInitialState {
-    noticeList: INotice[];
+    noticeList: PageNation<INotice>;
+    archiveList: PageNation<INotice>;
 }
 
 export interface INotice {
@@ -33,4 +34,9 @@ export interface IGetNoticeParams {
     //페이지네이션 종료
     limit: number;
     sort: "created-at desc";
+}
+
+export interface PageNation<T> {
+    data: T[];
+    size: number;
 }
