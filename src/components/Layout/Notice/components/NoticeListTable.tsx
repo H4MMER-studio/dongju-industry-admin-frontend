@@ -1,49 +1,106 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-const NoticeListTableLayout = styled.div``;
+const NoticeListTableLayout = styled.div`
+    position: relative;
+`;
+
 const NoticeListTableEle = styled.table`
     width: 100%;
-    border-top: 1px solid #777777;
-    border-bottom: 1px solid #777777;
-    background-color: #fff;
 `;
-const TableHeader = styled.th`
+
+interface TableHeaderProps {
+    isSetStyle: Boolean;
+}
+
+const TableHeader = styled.th<TableHeaderProps>`
     text-align: left;
     height: 44px;
     line-height: 44px;
     padding-left: 16px;
-    border-bottom: 1px solid #c8c8c8;
+    border-top: ${(props) => (props.isSetStyle ? "1px solid #777777" : "none")};
+    border-bottom: ${(props) => (props.isSetStyle ? "1px solid #c8c8c8" : "none")};
+    background-color: ${(props) => (props.isSetStyle ? "#fff" : "none")};
+    font-size: 15px;
 `;
-const TableRow = styled.tr`
+
+interface TableRowProps {
+    isLast?: Boolean;
+}
+
+const TableRow = styled.tr<TableRowProps>`
     height: 49px;
     cursor: pointer;
 
-    &:hover {
+    /* &:hover {
         background-color: #f5f5f5;
-    }
+    } */
 `;
 
-const TableData = styled.td`
+interface TableDataProps {
+    isSetStyle: Boolean;
+    isLast?: Boolean;
+}
+
+const TableData = styled.td<TableDataProps>`
     padding-left: 16px;
     color: #383838;
     font-weight: 400;
     font-size: 15px;
+    background-color: ${(props) => (props.isSetStyle ? "#fff" : "none")};
+    border-bottom: ${(props) => (props.isLast ? "1px solid #c8c8c8" : "none")};
+`;
+
+const ControlButtonLayout = styled.div`
+    display: flex;
+    width: 100%;
+`;
+
+const DeleteButton = styled.div`
+    font-size: 15px;
+    color: #ff334b;
+    font-weight: 600;
+    margin-right: 8px;
+`;
+
+const EditButton = styled.div`
+    font-size: 15px;
+    color: #2979ff;
+    font-weight: 600;
 `;
 
 const NoticeListTable: React.FC = () => {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
     return (
         <NoticeListTableLayout>
             <NoticeListTableEle>
-                <TableHeader>날짜</TableHeader>
-                <TableHeader>분류</TableHeader>
-                <TableHeader>제목</TableHeader>
-                {TES_DATE.map((d) => {
+                <TableHeader isSetStyle>날짜</TableHeader>
+                <TableHeader isSetStyle>분류</TableHeader>
+                <TableHeader isSetStyle>제목</TableHeader>
+                {TES_DATE.map((d, i) => {
                     return (
-                        <TableRow>
-                            <TableData style={{ width: 120 }}>{d.date}</TableData>
-                            <TableData style={{ width: 146 }}>{d.type}</TableData>
-                            <TableData>{d.title}</TableData>
+                        <TableRow
+                            key={i}
+                            onMouseEnter={() => setHoveredIndex(i)}
+                            onMouseLeave={() => setHoveredIndex(null)}>
+                            <TableData style={{ width: 120 }} isSetStyle isLast={TES_DATE.length - 1 === i}>
+                                {d.date}
+                            </TableData>
+                            <TableData style={{ width: 146 }} isSetStyle isLast={TES_DATE.length - 1 === i}>
+                                {d.type}
+                            </TableData>
+                            <TableData isSetStyle isLast={TES_DATE.length - 1 === i}>
+                                {d.title}
+                            </TableData>
+                            <TableData isSetStyle={false} style={{ width: 108 }}>
+                                {hoveredIndex === i && (
+                                    <ControlButtonLayout>
+                                        <DeleteButton>삭제</DeleteButton>
+                                        <EditButton>수정</EditButton>
+                                    </ControlButtonLayout>
+                                )}
+                            </TableData>
                         </TableRow>
                     );
                 })}
