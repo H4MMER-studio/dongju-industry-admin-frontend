@@ -17,11 +17,10 @@ const Title = styled.div`
     margin-right: 28px;
 `;
 
-const ListLayout = styled.div``;
-
 const TitleLayout = styled.div`
     display: flex;
     align-items: center;
+    margin-bottom: 24px;
 `;
 
 const AddContentsTextButton = styled.div`
@@ -44,7 +43,7 @@ const ArchivesContainer: React.FC = () => {
     return (
         <ArchivesContainerLayout>
             <TitleLayout>
-                <Title>공지사항</Title>
+                <Title>자료실</Title>
                 <AddContentsTextButton>게시물 작성</AddContentsTextButton>
             </TitleLayout>
             <Archives.ArchiveListTable list={archiveList.data} />

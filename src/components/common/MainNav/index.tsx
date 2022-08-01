@@ -275,7 +275,7 @@ const MainNav: React.FC<IProps> = ({
         // { value: '제품', id: 'product' },
         { value: "회사", id: "company" },
         { value: "공지", id: "notice" },
-        // { value: '고객지원', id: 'customer-service' },
+        { value: "고객지원", id: "customer-service" },
     ];
 
     const COMPANY_MENU: {
