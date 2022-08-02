@@ -4,6 +4,7 @@ import * as NoticeComponents from "./components";
 import { useDispatch } from "react-redux";
 import { noticeActions } from "@/store";
 import { useGetStore } from "@/hooks";
+import { Widgets } from "@/components";
 
 interface IProps {
     clickNoticeItem: (id: string) => void;
@@ -27,6 +28,7 @@ const ListLayout = styled.div``;
 const TitleLayout = styled.div`
     display: flex;
     align-items: center;
+    margin-bottom: 24px;
 `;
 
 const AddContentsTextButton = styled.div`
@@ -34,6 +36,34 @@ const AddContentsTextButton = styled.div`
     color: #2979ff;
     cursor: pointer;
     font-weight: 600;
+`;
+
+const FlexRightLayout = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+    width: calc(100% - 109px);
+`;
+
+const SelectorLayout = styled.div`
+    display: flex;
+    align-items: center;
+    width: 120px;
+    height: 48px;
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    border-radius: 12px;
+    padding-left: 12px;
+    margin-bottom: 12px;
+
+    .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+        padding: 0px;
+    }
+
+    .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+        padding-right: 54px;
+        font-size: 17px;
+        color: #777777;
+    }
 `;
 
 const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem, clickAddNotice }) => {
@@ -52,6 +82,11 @@ const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem, clickAddNotice }) 
                 <Title>공지사항</Title>
                 <AddContentsTextButton onClick={clickAddNotice}>게시물 작성</AddContentsTextButton>
             </TitleLayout>
+            <FlexRightLayout>
+                <SelectorLayout>
+                    <Widgets.Select.Selector options={[{ name: "최신순", value: "최신순" }]} />
+                </SelectorLayout>
+            </FlexRightLayout>
             <NoticeComponents.NoticeListTable />
         </NoticeContainerLayout>
     );

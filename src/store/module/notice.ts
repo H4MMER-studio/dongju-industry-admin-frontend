@@ -23,6 +23,7 @@ const slice = createSlice({
             state.archiveList = payload;
         },
         getNoticeList: (_, __: PayloadAction<IGetNoticeParams>) => {},
+        deleteNoticeOrArchive: (_, __: PayloadAction<{ notice_id: string }>) => {},
     },
 });
 

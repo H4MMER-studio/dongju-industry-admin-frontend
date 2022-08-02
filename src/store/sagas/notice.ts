@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { ActionType, INotice, IGetNoticeParams, PageNation } from "@/interfaces";
-import { API, NOTICES_API } from "@/utils";
+import { API, NOTICES_API, NOTICE_API } from "@/utils";
 import { noticeActions } from "../module/notice";
 
 export function* getNoticeListSage({ payload }: ActionType & { payload: IGetNoticeParams }) {
@@ -20,9 +20,21 @@ export function* getNoticeListSage({ payload }: ActionType & { payload: IGetNoti
     }
 }
 
+export function* deleteNoticeOrArchiveSaga({ payload }: ActionType & { payload: { notice_id: string } }) {
+    try {
+        yield call(API.DELETE, `${NOTICE_API}/${payload.notice_id}`);
+    } catch (error) {
+        console.log("delete notice error:", error);
+    }
+}
+
 //watch
 export function* watchGetNoticeList() {
     yield takeEvery(noticeActions.getNoticeList, getNoticeListSage);
 }
 
-export default [watchGetNoticeList].map((fn) => fn());
+export function* watchDeleteNoticeOrArchive() {
+    yield takeEvery(noticeActions.deleteNoticeOrArchive, deleteNoticeOrArchiveSaga);
+}
+
+export default [watchGetNoticeList, watchDeleteNoticeOrArchive].map((fn) => fn());

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { INotice } from "@/interfaces";
+import { noticeActions } from "@/store";
+import { useDispatch } from "react-redux";
 
 interface IProps {
     list: INotice[];
@@ -76,6 +78,12 @@ const EditButton = styled.div`
 
 const ArchiveListTable: React.FC<IProps> = ({ list }) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const dispatch = useDispatch();
+
+    const clickDeleteArchive = (archiveId: string) => {
+        dispatch(noticeActions.deleteNoticeOrArchive({ notice_id: archiveId }));
+        dispatch(noticeActions.getNoticeList({ value: "archive", skip: 1, limit: 30, sort: "created-at desc" }));
+    };
 
     return (
         <ArchiveListTableLayout>
@@ -88,7 +96,10 @@ const ArchiveListTable: React.FC<IProps> = ({ list }) => {
                         <TableRow
                             key={i}
                             onMouseEnter={() => setHoveredIndex(i)}
-                            onMouseLeave={() => setHoveredIndex(null)}>
+                            onMouseLeave={() => setHoveredIndex(null)}
+                            onClick={(e) => {
+                                console.log("로우 진행");
+                            }}>
                             <TableData style={{ width: 120 }} isSetStyle isLast={TES_DATE.length - 1 === i}>
                                 {archive.created_at}
                             </TableData>
@@ -101,8 +112,20 @@ const ArchiveListTable: React.FC<IProps> = ({ list }) => {
                             <TableData isSetStyle={false} style={{ width: 108 }}>
                                 {hoveredIndex === i && (
                                     <ControlButtonLayout>
-                                        <DeleteButton>삭제</DeleteButton>
-                                        <EditButton>수정</EditButton>
+                                        <DeleteButton
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                clickDeleteArchive(archive._id);
+                                            }}>
+                                            삭제
+                                        </DeleteButton>
+                                        <EditButton
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                console.log("수정");
+                                            }}>
+                                            수정
+                                        </EditButton>
                                     </ControlButtonLayout>
                                 )}
                             </TableData>

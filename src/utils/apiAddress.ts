@@ -7,3 +7,4 @@ export const DELIVERY_LIST_API = "/deliveries";
 export const DELIVERY_API = "/delivery";
 export const LOGIN_API = "/admin/sign-in";
 export const NOTICES_API = "/notices";
+export const NOTICE_API = "/notice";
