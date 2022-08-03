@@ -28,6 +28,15 @@ export function* deleteNoticeOrArchiveSaga({ payload }: ActionType & { payload: 
     }
 }
 
+export function* getNoticeDetailSaga({ payload }: ActionType & { payload: { noticeId: string } }) {
+    try {
+        const noticeDetail: INotice = yield call(API.GET, `${NOTICE_API}/${payload.noticeId}`);
+        yield put(noticeActions.setNoticeDetail(noticeDetail));
+    } catch (error) {
+        console.log("notice detail error:", error);
+    }
+}
+
 //watch
 export function* watchGetNoticeList() {
     yield takeEvery(noticeActions.getNoticeList, getNoticeListSage);
@@ -37,4 +46,8 @@ export function* watchDeleteNoticeOrArchive() {
     yield takeEvery(noticeActions.deleteNoticeOrArchive, deleteNoticeOrArchiveSaga);
 }
 
-export default [watchGetNoticeList, watchDeleteNoticeOrArchive].map((fn) => fn());
+export function* watchGetNoticeDetail() {
+    yield takeEvery(noticeActions.getNoticeDetail, getNoticeDetailSaga);
+}
+
+export default [watchGetNoticeList, watchDeleteNoticeOrArchive, watchGetNoticeDetail].map((fn) => fn());

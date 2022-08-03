@@ -1,6 +1,7 @@
 export interface INotificationInitialState {
     noticeList: PageNation<INotice>;
     archiveList: PageNation<INotice>;
+    noticeDetail: INotice | null;
 }
 
 export interface INotice {

@@ -1,9 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import * as NoticeComponents from "./components";
-import { useDispatch } from "react-redux";
-import { noticeActions } from "@/store";
-import { useGetStore } from "@/hooks";
 import { Widgets } from "@/components";
 
 interface IProps {
@@ -67,15 +64,6 @@ const SelectorLayout = styled.div`
 `;
 
 const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem, clickAddNotice }) => {
-    const dispatch = useDispatch();
-    const { noticeList } = useGetStore.notice();
-
-    useEffect(() => {
-        dispatch(noticeActions.getNoticeList({ value: "notification", skip: 1, limit: 30, sort: "created-at desc" }));
-    }, []);
-
-    console.log("이건가?", noticeList);
-
     return (
         <NoticeContainerLayout>
             <TitleLayout>

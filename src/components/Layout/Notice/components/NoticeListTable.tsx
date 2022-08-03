@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { INotice } from "@/interfaces";
+import { noticeActions } from "@/store";
+import { useDispatch } from "react-redux";
+import { useGetStore } from "@/hooks";
+import { useRouter } from "next/router";
 
 const NoticeListTableLayout = styled.div`
     position: relative;
@@ -70,7 +75,18 @@ const EditButton = styled.div`
 `;
 
 const NoticeListTable: React.FC = () => {
+    const router = useRouter();
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const dispatch = useDispatch();
+    const { noticeList } = useGetStore.notice();
+
+    useEffect(() => {
+        dispatch(noticeActions.getNoticeList({ value: "notification", skip: 1, limit: 30, sort: "created-at desc" }));
+    }, []);
+
+    const clickNotice = (noticeId: string) => {
+        router.push(`/notice/notice/detail/${noticeId}`);
+    };
 
     return (
         <NoticeListTableLayout>
@@ -78,20 +94,21 @@ const NoticeListTable: React.FC = () => {
                 <TableHeader isSetStyle>날짜</TableHeader>
                 <TableHeader isSetStyle>분류</TableHeader>
                 <TableHeader isSetStyle>제목</TableHeader>
-                {TES_DATE.map((d, i) => {
+                {noticeList.data.map((notice, i) => {
                     return (
                         <TableRow
                             key={i}
                             onMouseEnter={() => setHoveredIndex(i)}
-                            onMouseLeave={() => setHoveredIndex(null)}>
-                            <TableData style={{ width: 120 }} isSetStyle isLast={TES_DATE.length - 1 === i}>
-                                {d.date}
+                            onMouseLeave={() => setHoveredIndex(null)}
+                            onClick={() => clickNotice(notice._id)}>
+                            <TableData style={{ width: 120 }} isSetStyle isLast={noticeList.data.length - 1 === i}>
+                                {notice.created_at}
                             </TableData>
-                            <TableData style={{ width: 146 }} isSetStyle isLast={TES_DATE.length - 1 === i}>
-                                {d.type}
+                            <TableData style={{ width: 146 }} isSetStyle isLast={noticeList.data.length - 1 === i}>
+                                {notice.notice_type}
                             </TableData>
-                            <TableData isSetStyle isLast={TES_DATE.length - 1 === i}>
-                                {d.title}
+                            <TableData isSetStyle isLast={noticeList.data.length - 1 === i}>
+                                {notice.notice_title}
                             </TableData>
                             <TableData isSetStyle={false} style={{ width: 108 }}>
                                 {hoveredIndex === i && (
@@ -110,12 +127,3 @@ const NoticeListTable: React.FC = () => {
 };
 
 export default NoticeListTable;
-
-const TES_DATE = [
-    { date: "2012.2", type: "A/S문의", title: "공기조화기가 박살났어요 큰일이네용" },
-    { date: "2012.2", type: "A/S문의", title: "공기조화기가 박살났어요 큰일이네용" },
-    { date: "2012.2", type: "A/S문의", title: "공기조화기가 박살났어요 큰일이네용" },
-    { date: "2012.2", type: "A/S문의", title: "공기조화기가 박살났어요 큰일이네용" },
-    { date: "2012.2", type: "A/S문의", title: "공기조화기가 박살났어요 큰일이네용" },
-    { date: "2012.2", type: "A/S문의", title: "공기조화기가 박살났어요 큰일이네용" },
-];

@@ -10,6 +10,7 @@ const initialState: INotificationInitialState = {
         data: [],
         size: 0,
     },
+    noticeDetail: null,
 };
 
 const slice = createSlice({
@@ -22,18 +23,24 @@ const slice = createSlice({
         setArchiveList: (state, { payload }: PayloadAction<INotificationInitialState["noticeList"]>) => {
             state.archiveList = payload;
         },
+        setNoticeDetail: (state, { payload }: PayloadAction<INotificationInitialState["noticeDetail"]>) => {
+            state.noticeDetail = payload;
+        },
         getNoticeList: (_, __: PayloadAction<IGetNoticeParams>) => {},
         deleteNoticeOrArchive: (_, __: PayloadAction<{ notice_id: string }>) => {},
+        getNoticeDetail: (_, __: PayloadAction<{ noticeId: string }>) => {},
     },
 });
 
 export const selectNoticeState = createSelector(
     (state: INotificationInitialState) => state.noticeList,
     (state: INotificationInitialState) => state.archiveList,
-    (noticeList, archiveList) => {
+    (state: INotificationInitialState) => state.noticeDetail,
+    (noticeList, archiveList, noticeDetail) => {
         return {
             noticeList,
             archiveList,
+            noticeDetail,
         };
     }
 );
