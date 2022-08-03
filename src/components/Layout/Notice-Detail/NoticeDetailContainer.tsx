@@ -22,7 +22,7 @@ const NoticeDetailContainer: React.FC = () => {
     return (
         <NoticeDetailContainerLayout>
             <Header>
-                <Title>타이틀을 입력해 주세요</Title>
+                <Title>{noticeDetail.data.current?.notice_title}</Title>
                 <WriterLayout>
                     <Writer>작성자: {`글쓴이`}</Writer>
                     <DateText>2020.01.20</DateText>
@@ -52,11 +52,11 @@ export default NoticeDetailContainer;
 
 const NoticeDetailContainerLayout = styled.div`
     width: 100%;
-    padding: 16px 32px 20px;
+    padding: 60px 32px 20px;
 `;
 
 const Title = styled.div`
-    font-size: 17px;
+    font-size: 36px;
     font-weight: 600;
     margin-bottom: 8px;
 `;

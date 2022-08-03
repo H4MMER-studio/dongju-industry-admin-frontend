@@ -30,7 +30,11 @@ export function* deleteNoticeOrArchiveSaga({ payload }: ActionType & { payload: 
 
 export function* getNoticeDetailSaga({ payload }: ActionType & { payload: { noticeId: string } }) {
     try {
-        const noticeDetail: INotice = yield call(API.GET, `${NOTICE_API}/${payload.noticeId}`);
+        const noticeDetail: {
+            data: {
+                current: null;
+            };
+        } = yield call(API.GET, `${NOTICE_API}/${payload.noticeId}`);
         yield put(noticeActions.setNoticeDetail(noticeDetail));
     } catch (error) {
         console.log("notice detail error:", error);

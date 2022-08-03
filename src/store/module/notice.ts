@@ -10,7 +10,11 @@ const initialState: INotificationInitialState = {
         data: [],
         size: 0,
     },
-    noticeDetail: null,
+    noticeDetail: {
+        data: {
+            current: null,
+        },
+    },
 };
 
 const slice = createSlice({
