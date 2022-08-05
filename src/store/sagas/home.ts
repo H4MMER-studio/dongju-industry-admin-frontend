@@ -13,7 +13,7 @@ export function* postLoginSaga({
     });
     localStorage.setItem('dongju-admin-token', token.data);
     alert('환영합니다.');
-    yield put(push('/'));
+    yield put(push('/company/history'));
   } catch (error) {
     console.error(error);
     alert('아이디 비밀번호를 확인해주세요.');

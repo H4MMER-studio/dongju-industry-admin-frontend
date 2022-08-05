@@ -15,14 +15,15 @@ interface IProps {
   modalOnAt: string;
   selectedSearchTitle: string;
   orderModalOn: boolean;
-  onClickSetModalOnAt(name: string): void;
-  orderModalHandler(onOff: boolean): void;
-  onClickSetSelectedOrder(type: string): void;
   onChangeSearchText(text: string): void;
+  orderModalHandler(onOff: boolean): void;
+  onClickSetModalOnAt(name: string): void;
+  onClickSetSelectedOrder(type: string): void;
   onClickSetSelectedSearchTitle(type: string): void;
   onClickPageHandler(page: number): void;
   onClickDeleteDelivery(id: string | number): void;
   onClickPatchDelivery(id: string | number, info: IPostDelivery): void;
+  getDeliveryList(searchText?: string): void;
 }
 
 const PerformanceMain: React.FC<IProps> = ({
@@ -40,10 +41,15 @@ const PerformanceMain: React.FC<IProps> = ({
   onClickPageHandler,
   onClickDeleteDelivery,
   onClickPatchDelivery,
+  getDeliveryList,
 }) => {
   const [selectedRow, setSelectedRow] = useState<string | number | null>(null);
-  const { selectedInfo, deliveryList } = useGetStore.performance();
+  const { selectedInfo, deliveryList, searchList } = useGetStore.performance();
   const dispatch = useDispatch();
+  const newPageNumbers = Array(Math.ceil((deliveryList?.size ?? 0) / 10))
+    .fill(0)
+    .map((_, index) => index + 1)
+    .filter((num) => Math.abs(page - num) < 5);
 
   const onClickSetSelectedInfo = (info: ISelectedInfo | null) => {
     dispatch(performanceActions.setSelectedInfo(info));
@@ -74,8 +80,19 @@ const PerformanceMain: React.FC<IProps> = ({
                 onClickSetModalOnAt('searchText');
               }}
               value={searchText}
-              onChange={(e) => onChangeSearchText(e.target.value)}
-              placeholder="검색어를 입력하세요."
+              onKeyUp={(e) => {
+                if (e.key === 'Enter') {
+                  if (page === 1) {
+                    getDeliveryList();
+                  } else {
+                    onClickPageHandler(1);
+                  }
+                }
+              }}
+              onChange={(e) => {
+                onChangeSearchText(e.target.value);
+              }}
+              placeholder='검색어를 입력하세요.'
             />
             <IconSearch />
           </S.SearchWrapper>
@@ -97,11 +114,12 @@ const PerformanceMain: React.FC<IProps> = ({
           )}
           {modalOnAt === 'searchText' && (
             <S.DeliverySearchTextBox onClick={(e) => e.stopPropagation()}>
-              {['예시1', '예시2', '예시3', '예시4'].map((text) => (
+              {searchList?.map((text) => (
                 <S.DeliverySearchText
                   key={text}
                   onClick={() => {
                     onChangeSearchText(text);
+                    getDeliveryList(text);
                     onClickSetModalOnAt('');
                   }}
                 >
@@ -158,6 +176,8 @@ const PerformanceMain: React.FC<IProps> = ({
               deliveryInfo={info}
               selectedInfo={selectedInfo}
               selectedRow={selectedRow}
+              onChangeSearchText={onChangeSearchText}
+              onClickPageHandler={onClickPageHandler}
               onClickDeleteDelivery={onClickDeleteDelivery}
               onClickPatchDelivery={onClickPatchDelivery}
               onClickSetSelectedInfo={onClickSetSelectedInfo}
@@ -169,35 +189,37 @@ const PerformanceMain: React.FC<IProps> = ({
         </div>
       </S.TableContainer>
       <S.PageNationLayout>
-        <S.ArrowIcon
-          onClick={() => {
-            if (page !== 1) {
-              onClickPageHandler(page - 1);
-            }
-          }}
-          src={Images.PagenationLeft}
-          style={{ marginRight: 20 }}
-        />
-        {Array(Math.round(deliveryList.size / 10))
-          .fill(0)
-          .map((_, index) => (
-            <S.PageNumber
-              isSelected={page === index + 1}
-              onClick={() => onClickPageHandler(index + 1)}
-            >
-              {index + 1}
-            </S.PageNumber>
-          ))}
+        {page !== 1 && (
+          <S.ArrowIcon
+            onClick={() => {
+              if (page !== 1) {
+                onClickPageHandler(page - 1);
+              }
+            }}
+            src={Images.PagenationLeft}
+            style={{ marginRight: 20 }}
+          />
+        )}
+        {newPageNumbers.map((num) => (
+          <S.PageNumber
+            isSelected={page === num}
+            onClick={() => onClickPageHandler(num)}
+          >
+            {num}
+          </S.PageNumber>
+        ))}
 
-        <S.ArrowIcon
-          onClick={() => {
-            if (page !== Math.round(deliveryList.size / 10)) {
-              onClickPageHandler(page + 1);
-            }
-          }}
-          src={Images.PagenationRight}
-          style={{ marginLeft: 8 }}
-        />
+        {page < Math.round(deliveryList.size / 10) && (
+          <S.ArrowIcon
+            onClick={() => {
+              if (page !== Math.round(deliveryList.size / 10)) {
+                onClickPageHandler(page + 1);
+              }
+            }}
+            src={Images.PagenationRight}
+            style={{ marginLeft: 8 }}
+          />
+        )}
       </S.PageNationLayout>
     </S.Container>
   );

@@ -12,18 +12,26 @@ export function* getDeliveryListSaga({
   payload,
 }: ActionType & { payload: IGetDeliveryListParams }) {
   try {
+    const { isAsc, isSearch, limit, skip, field, value } = payload;
     const deliveryList = yield call(
       API.GET,
-      `${DELIVERY_LIST_API}?skip=${payload.skip}&limit=${payload.limit}${
-        payload.isAsc ? '' : '&sort=delivery-year+desc&sort=delivery-month+desc'
+      `${DELIVERY_LIST_API}?skip=${skip}&limit=${limit}${
+        isSearch ? `&type=search` : ''
+      }${field ? `&field=${field}` : ''}&value=${value}${
+        isAsc ? '' : '&sort=delivery-year+desc&sort=delivery-month+desc'
       }`
     );
-    yield put(
-      performanceActions.setDeliveryList({
-        list: deliveryList.data,
-        size: deliveryList.size,
-      })
-    );
+
+    if (isSearch) {
+      yield put(performanceActions.setSearchList(deliveryList.data));
+    } else {
+      yield put(
+        performanceActions.setDeliveryList({
+          list: deliveryList.data,
+          size: deliveryList.size,
+        })
+      );
+    }
   } catch (error) {
     console.error(error);
   }

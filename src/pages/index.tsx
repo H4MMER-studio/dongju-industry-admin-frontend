@@ -12,9 +12,7 @@ const HomePage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  useEffect(() => {
-    router.push('/login');
-  }, []);
+  useEffect(() => {}, []);
 
   const onClickSetTest = (test: string) => {};
 
