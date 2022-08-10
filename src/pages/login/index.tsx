@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { NextPage } from 'next';
@@ -10,6 +10,13 @@ const LoginPage: NextPage = () => {
   const [currentIdPw, setCurrentIdPw] = useState({ id: '', pw: '' });
   const router = useRouter();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const dongjuAdminToken = localStorage.getItem('dongju-admin-token');
+    if (dongjuAdminToken) {
+      router.push('/');
+    }
+  }, []);
 
   const onClickSubmit = () => {
     dispatch(

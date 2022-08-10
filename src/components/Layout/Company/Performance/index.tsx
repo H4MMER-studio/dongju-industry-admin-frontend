@@ -29,6 +29,7 @@ const Performance: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [orderModalOn, setOrderModalOn] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState('new');
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -40,14 +41,50 @@ const Performance: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    getDeliveryList();
+  }, [selectedOrder, page]);
+
+  useEffect(() => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    const newTimer = setTimeout(() => {
+      getSearchList(searchText);
+    }, 200);
+    setTimer(newTimer);
+  }, [searchText]);
+
+  const getSearchList = (searchText: string) => {
     dispatch(
       performanceActions.getDeliveryList({
         isAsc: selectedOrder !== 'new',
+        isSearch: true,
+        field:
+          selectedSearchTitle === '납품처'
+            ? 'delivery_supplier'
+            : 'delivery_product',
+        value: searchText,
+        skip: 1,
+        limit: 100,
+      })
+    );
+  };
+
+  const getDeliveryList = (currentSearchText?: string) => {
+    dispatch(
+      performanceActions.getDeliveryList({
+        isAsc: selectedOrder !== 'new',
+        isSearch: false,
+        field:
+          selectedSearchTitle === '납품처'
+            ? 'delivery_supplier'
+            : 'delivery_product',
+        value: currentSearchText ?? searchText,
         skip: 10 * page - 9,
         limit: 10 * page,
       })
     );
-  }, [selectedOrder, page]);
+  };
 
   const onClickCloseModal = () => {
     setModalOnAt('');
@@ -96,6 +133,7 @@ const Performance: React.FC = () => {
   const onClickPatchDelivery = (id: number | string, info: IPostDelivery) => {
     dispatch(performanceActions.patchDelivery({ id, info }));
   };
+
   return (
     <>
       <AddPerformance
@@ -118,6 +156,7 @@ const Performance: React.FC = () => {
         onClickPageHandler={onClickPageHandler}
         onClickDeleteDelivery={onClickDeleteDelivery}
         onClickPatchDelivery={onClickPatchDelivery}
+        getDeliveryList={getDeliveryList}
       />
     </>
   );

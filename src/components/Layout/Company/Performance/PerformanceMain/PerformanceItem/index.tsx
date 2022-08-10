@@ -8,6 +8,8 @@ interface IProps {
   selectedRow: string | number | null;
   deliveryInfo: IDeliveryList;
   selectedInfo: ISelectedInfo | null;
+  onChangeSearchText(text: string): void;
+  onClickPageHandler(page: number): void;
   onClickDeleteDelivery(id: string | number): void;
   onClickPatchDelivery(id: string | number, info: IPostDelivery): void;
   selectedRowHandler(id: string | number | null): void;
@@ -18,6 +20,8 @@ const PerformanceItem: React.FC<IProps> = ({
   selectedRow,
   deliveryInfo,
   selectedInfo,
+  onChangeSearchText,
+  onClickPageHandler,
   onClickDeleteDelivery,
   onClickPatchDelivery,
   selectedRowHandler,
@@ -82,8 +86,8 @@ const PerformanceItem: React.FC<IProps> = ({
           />
           <S.SelectBox width={0.3}>
             <select
-              className="inputStyle"
-              placeholder="날짜"
+              className='inputStyle'
+              placeholder='날짜'
               onChange={(e) =>
                 patchInfoHandler('delivery_year', e.target.value)
               }
@@ -93,12 +97,12 @@ const PerformanceItem: React.FC<IProps> = ({
                 <option key={year}>{year}</option>
               ))}
             </select>
-            <IconDownArrowGray className="svgStyle" />
+            <IconDownArrowGray className='svgStyle' />
           </S.SelectBox>
           <S.SelectBox width={0.3}>
             <select
-              className="inputStyle"
-              placeholder="날짜"
+              className='inputStyle'
+              placeholder='날짜'
               onChange={(e) =>
                 patchInfoHandler('delivery_month', e.target.value)
               }
@@ -108,7 +112,7 @@ const PerformanceItem: React.FC<IProps> = ({
                 <option key={month}>{month}</option>
               ))}
             </select>
-            <IconDownArrowGray className="svgStyle" />
+            <IconDownArrowGray className='svgStyle' />
           </S.SelectBox>
           <S.InputBox
             width={0.74}
@@ -140,10 +144,12 @@ const PerformanceItem: React.FC<IProps> = ({
             취소
           </S.ModifyButton>
           <S.ModifyButton
-            color="blue"
+            color='blue'
             onClick={() => {
               onClickPatchDelivery(_id, patchInfo);
               onClickSetSelectedInfo(null);
+              onChangeSearchText('');
+              onClickPageHandler(1);
             }}
           >
             저장
@@ -164,7 +170,7 @@ const PerformanceItem: React.FC<IProps> = ({
               삭제
             </S.ModifyButton>
             <S.ModifyButton
-              color="blue"
+              color='blue'
               onClick={() => {
                 onClickSetSelectedInfo({
                   id: _id,

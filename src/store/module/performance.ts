@@ -7,6 +7,7 @@ import {
 
 const initialState: IPerformanceInitialState = {
   selectedInfo: null,
+  searchList: [],
   deliveryList: { list: [], size: 0 },
 };
 
@@ -26,6 +27,9 @@ const slice = createSlice({
     ) => {
       state.deliveryList = payload;
     },
+    setSearchList: (state, { payload }: PayloadAction<string[]>) => {
+      state.searchList = payload;
+    },
     getDeliveryList: (_, __: PayloadAction<IGetDeliveryListParams>) => {},
     postDelivery: (_, __: PayloadAction<IPostDelivery>) => {},
     patchDelivery: (
@@ -39,10 +43,12 @@ const slice = createSlice({
 export const selectPerformanceState = createSelector(
   (state: IPerformanceInitialState) => state.selectedInfo,
   (state: IPerformanceInitialState) => state.deliveryList,
-  (selectedInfo, deliveryList) => {
+  (state: IPerformanceInitialState) => state.searchList,
+  (selectedInfo, deliveryList, searchList) => {
     return {
       selectedInfo,
       deliveryList,
+      searchList,
     };
   }
 );

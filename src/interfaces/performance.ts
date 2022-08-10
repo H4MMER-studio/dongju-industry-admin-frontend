@@ -1,5 +1,6 @@
 export interface IPerformanceInitialState {
   selectedInfo: ISelectedInfo | null;
+  searchList: string[];
   deliveryList: { list: IDeliveryList[]; size: number };
 }
 
@@ -30,6 +31,9 @@ export interface IGetDeliveryListParams {
   skip: number;
   limit: number;
   isAsc: boolean;
+  isSearch: boolean;
+  field?: 'delivery_supplier' | 'delivery_product';
+  value?: string;
 }
 
 export interface IPostDelivery {
