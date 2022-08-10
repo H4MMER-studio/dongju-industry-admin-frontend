@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import * as NoticeComponents from "./components";
 import { Widgets } from "@/components";
+import { useDispatch } from "react-redux";
+import { noticeActions } from "@/store";
+import { useGetStore } from "@/hooks";
 
 interface IProps {
     clickNoticeItem: (id: string) => void;
@@ -63,7 +66,24 @@ const SelectorLayout = styled.div`
     }
 `;
 
+const CenterLayout = styled.div`
+    width: calc(100% - 108px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+`;
+
 const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem, clickAddNotice }) => {
+    const [skip, setSkip] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const dispatch = useDispatch();
+    const { noticeList } = useGetStore.notice();
+
+    useEffect(() => {
+        dispatch(noticeActions.getNoticeList({ value: "notification", skip, limit, sort: "created-at desc" }));
+    }, [skip]);
+
     return (
         <NoticeContainerLayout>
             <TitleLayout>
@@ -75,7 +95,20 @@ const NoticeContainer: React.FC<IProps> = ({ clickNoticeItem, clickAddNotice }) 
                     <Widgets.Select.Selector options={[{ name: "최신순", value: "최신순" }]} />
                 </SelectorLayout>
             </FlexRightLayout>
-            <NoticeComponents.NoticeListTable />
+            <NoticeComponents.NoticeListTable noticeList={noticeList.data} />
+            <CenterLayout>
+                <Widgets.Pagination.BasicPagination
+                    total={
+                        Number.isInteger(noticeList.size / 10)
+                            ? noticeList.data.length / 10
+                            : Math.floor(noticeList.size / 10) + 1
+                    }
+                    clickPage={(page) => {
+                        setSkip(page * 10 - 9);
+                        setLimit(page * 10);
+                    }}
+                />
+            </CenterLayout>
         </NoticeContainerLayout>
     );
 };

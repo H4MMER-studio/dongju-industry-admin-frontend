@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { INotice } from "@/interfaces";
 import { noticeActions } from "@/store";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 interface IProps {
     list: INotice[];
@@ -81,6 +82,11 @@ const EditButton = styled.div`
 const ArchiveListTable: React.FC<IProps> = ({ list, skip, limit }) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const dispatch = useDispatch();
+    const router = useRouter();
+
+    const clickArchive = (archiveId: string) => {
+        router.push(`/notice/archives/detail/${archiveId}`);
+    };
 
     const clickDeleteArchive = (archiveId: string) => {
         dispatch(noticeActions.deleteNoticeOrArchive({ notice_id: archiveId, skip, limit }));
@@ -101,8 +107,8 @@ const ArchiveListTable: React.FC<IProps> = ({ list, skip, limit }) => {
                             key={i}
                             onMouseEnter={() => setHoveredIndex(i)}
                             onMouseLeave={() => setHoveredIndex(null)}
-                            onClick={(e) => {
-                                console.log("로우 진행");
+                            onClick={() => {
+                                clickArchive(archive._id);
                             }}>
                             <TableData style={{ width: 120 }} isSetStyle isLast={TES_DATE.length - 1 === i}>
                                 {archive.created_at}
