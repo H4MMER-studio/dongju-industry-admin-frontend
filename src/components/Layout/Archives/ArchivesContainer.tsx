@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { noticeActions } from "@/store";
@@ -59,13 +59,23 @@ const SelectorLayout = styled.div`
     }
 `;
 
+const CenterLayout = styled.div`
+    width: calc(100% - 108px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+`;
+
 const ArchivesContainer: React.FC = () => {
+    const [skip, setSkip] = useState(1);
+    const [limit, setLimit] = useState(10);
     const dispatch = useDispatch();
     const { archiveList } = useGetStore.notice();
 
     useEffect(() => {
-        dispatch(noticeActions.getNoticeList({ value: "archive", skip: 1, limit: 10, sort: "created-at desc" }));
-    }, []);
+        dispatch(noticeActions.getNoticeList({ value: "archive", skip, limit, sort: "created-at desc" }));
+    }, [skip]);
 
     return (
         <ArchivesContainerLayout>
@@ -78,15 +88,20 @@ const ArchivesContainer: React.FC = () => {
                     <Widgets.Select.Selector options={[{ name: "최신순", value: "최신순" }]} />
                 </SelectorLayout>
             </FlexRightLayout>
-            <Archives.ArchiveListTable list={archiveList.data} />
-            <Widgets.Pagination.BasicPagination
-                total={
-                    Number.isInteger(archiveList.size / 10)
-                        ? archiveList.data.length / 10
-                        : Math.floor(archiveList.size / 10) + 1
-                }
-                clickPage={() => {}}
-            />
+            <Archives.ArchiveListTable list={archiveList.data} skip={skip} limit={limit} />
+            <CenterLayout>
+                <Widgets.Pagination.BasicPagination
+                    total={
+                        Number.isInteger(archiveList.size / 10)
+                            ? archiveList.data.length / 10
+                            : Math.floor(archiveList.size / 10) + 1
+                    }
+                    clickPage={(page) => {
+                        setSkip(page * 10 - 9);
+                        setLimit(page * 10);
+                    }}
+                />
+            </CenterLayout>
         </ArchivesContainerLayout>
     );
 };
