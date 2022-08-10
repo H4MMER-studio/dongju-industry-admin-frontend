@@ -31,7 +31,7 @@ const slice = createSlice({
             state.noticeDetail = payload;
         },
         getNoticeList: (_, __: PayloadAction<IGetNoticeParams>) => {},
-        deleteNoticeOrArchive: (_, __: PayloadAction<{ notice_id: string }>) => {},
+        deleteNoticeOrArchive: (_, __: PayloadAction<{ notice_id: string; skip: number; limit: number }>) => {},
         getNoticeDetail: (_, __: PayloadAction<{ noticeId: string }>) => {},
     },
 });

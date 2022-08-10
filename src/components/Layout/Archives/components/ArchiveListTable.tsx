@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 
 interface IProps {
     list: INotice[];
+    skip: number;
+    limit: number;
 }
 
 const ArchiveListTableLayout = styled.div`
@@ -76,13 +78,15 @@ const EditButton = styled.div`
     font-weight: 600;
 `;
 
-const ArchiveListTable: React.FC<IProps> = ({ list }) => {
+const ArchiveListTable: React.FC<IProps> = ({ list, skip, limit }) => {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const dispatch = useDispatch();
 
     const clickDeleteArchive = (archiveId: string) => {
-        dispatch(noticeActions.deleteNoticeOrArchive({ notice_id: archiveId }));
-        dispatch(noticeActions.getNoticeList({ value: "archive", skip: 1, limit: 30, sort: "created-at desc" }));
+        dispatch(noticeActions.deleteNoticeOrArchive({ notice_id: archiveId, skip, limit }));
+        // setTimeout(() => {
+        //     dispatch(noticeActions.getNoticeList({ value: "archive", skip, limit, sort: "created-at desc" }));
+        // }, 700);
     };
 
     return (

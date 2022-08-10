@@ -20,9 +20,16 @@ export function* getNoticeListSage({ payload }: ActionType & { payload: IGetNoti
     }
 }
 
-export function* deleteNoticeOrArchiveSaga({ payload }: ActionType & { payload: { notice_id: string } }) {
+export function* deleteNoticeOrArchiveSaga({
+    payload,
+}: ActionType & { payload: { notice_id: string; skip: number; limit: number } }) {
     try {
         yield call(API.DELETE, `${NOTICE_API}/${payload.notice_id}`);
+        // const list: PageNation<INotice> = yield call(
+        //     API.GET,
+        //     `${NOTICES_API}?value=${"archive"}&skip=${payload.skip}&limit=${payload.limit}&sort=${"created-at desc"}`
+        // );
+        // yield put(noticeActions.setArchiveList(list));
     } catch (error) {
         console.log("delete notice error:", error);
     }

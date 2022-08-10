@@ -11,39 +11,43 @@ const NoticeDetailContainer: React.FC = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     const { noticeDetail } = useGetStore.notice();
+    const newDate = noticeDetail.data.current?.created_at?.split("-").join(".");
 
     useEffect(() => {
         let params = router.query as { id: string };
         dispatch(noticeActions.getNoticeDetail({ noticeId: params.id }));
     }, []);
 
-    console.log(noticeDetail);
-
     return (
         <NoticeDetailContainerLayout>
             <Header>
                 <Title>{noticeDetail.data.current?.notice_title}</Title>
                 <WriterLayout>
-                    <Writer>작성자: {`글쓴이`}</Writer>
-                    <DateText>2020.01.20</DateText>
+                    <WriterProfilImage src={"/image/favi.png"} />
+                    <div>
+                        <Writer>동주산업</Writer>
+                        <DateText>{newDate}</DateText>
+                    </div>
                 </WriterLayout>
             </Header>
-            <ContentsContainer>{"내용 입니다."}</ContentsContainer>
-            <SubText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Enim praesent velit turpis aenean vestibulum id
-                lectus urna, in. Urna risus nulla nulla condimentum lorem nunc. Lectus in lobortis tellus tincidunt. At
-                libero ultrices lorem sed felis gravida commodo eget integer.
-            </SubText>
-            <AttachedFileLayout>
-                <NoticeDetailComponents.AttachedFile />
-            </AttachedFileLayout>
-            <CopyLinkLayout>
-                <ButtonLayout>
-                    <Text>링크복사</Text>
-                    <Icon.ShareIcon />
-                </ButtonLayout>
-            </CopyLinkLayout>
-            <Border />
+            {(noticeDetail.data.current?.notice_images?.length ?? 0) > 0 && (
+                <ContentImage
+                    alt={noticeDetail.data.current?.notice_images[0].name}
+                    src={noticeDetail.data.current?.notice_images[0].url}
+                />
+            )}
+            {(noticeDetail.data.current?.notice_files?.length ?? 0) > 0 &&
+                noticeDetail.data.current?.notice_files.map(({ name, url }) => {
+                    return (
+                        <DownloadFileLayout href={url} download={name} target="_blank">
+                            <DownloadFileName>{noticeDetail.data.current?.notice_files[0].name}</DownloadFileName>
+                            <Icon.DownloadIconBlue />
+                        </DownloadFileLayout>
+                    );
+                })}
+            {/* <ContentsContainer>{"내용 입니다."}</ContentsContainer> */}
+            {/* <SubText>{detail.current.notice_content}</SubText> */}
+            <SubText>{noticeDetail.data.current?.notice_content}</SubText>
         </NoticeDetailContainerLayout>
     );
 };
@@ -53,6 +57,8 @@ export default NoticeDetailContainer;
 const NoticeDetailContainerLayout = styled.div`
     width: 100%;
     padding: 60px 32px 20px;
+    height: 100vh;
+    overflow-y: scroll;
 `;
 
 const Title = styled.div`
@@ -64,19 +70,18 @@ const Title = styled.div`
 const WriterLayout = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
 `;
 
 const Writer = styled.div`
-    color: #b7b7b7;
-    font-size: 15px;
+    color: #555555;
+    font-size: 17x;
     font-weight: 400;
 `;
 
 const DateText = styled.div`
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 400;
-    color: #b7b7b7;
+    color: #555555;
 `;
 
 const Header = styled.header`
@@ -88,13 +93,6 @@ const ContentsContainer = styled.div`
     min-height: 480px;
     background-color: #777777;
     margin-bottom: 12px;
-`;
-
-const SubText = styled.div`
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 30px;
-    margin-bottom: 24px;
 `;
 
 const AttachedFileLayout = styled.div`
@@ -126,4 +124,48 @@ const Border = styled.div`
     width: 100%;
     height: 1px;
     background-color: #383838;
+`;
+
+const WriterProfilImage = styled.img`
+    width: 48px;
+    height: 48px;
+    padding: 8px;
+    padding-left: 10px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 1px solid #d0d0d0;
+    margin-right: 16px;
+    object-fit: contain;
+`;
+
+const ContentImage = styled.img`
+    width: 100%;
+    background-color: #383838;
+    margin-bottom: 32px;
+`;
+
+const DownloadFileLayout = styled.a`
+    width: 100%;
+    height: 48px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 0px 16px 0px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    cursor: pointer;
+`;
+const DownloadFileName = styled.p`
+    font-size: 15px;
+    color: #2979ff;
+`;
+
+const SubText = styled.div`
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 32px;
+    margin-bottom: 84px;
+    color: #383838;
 `;
