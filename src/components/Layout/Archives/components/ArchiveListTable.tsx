@@ -83,7 +83,7 @@ const ArchiveListTable: React.FC<IProps> = ({ list, skip, limit }) => {
     const dispatch = useDispatch();
 
     const clickDeleteArchive = (archiveId: string) => {
-        dispatch(noticeActions.deleteNoticeOrArchive({ notice_id: archiveId }));
+        dispatch(noticeActions.deleteNoticeOrArchive({ notice_id: archiveId, skip, limit }));
         // setTimeout(() => {
         //     dispatch(noticeActions.getNoticeList({ value: "archive", skip, limit, sort: "created-at desc" }));
         // }, 700);
