@@ -77,6 +77,8 @@ const ArchivesContainer: React.FC = () => {
         dispatch(noticeActions.getNoticeList({ value: "archive", skip, limit, sort: "created-at desc" }));
     }, [skip]);
 
+    console.log("자료실:", archiveList);
+
     return (
         <ArchivesContainerLayout>
             <TitleLayout>
