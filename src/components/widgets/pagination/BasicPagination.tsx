@@ -4,15 +4,16 @@ import Stack from "@mui/material/Stack";
 
 interface BasicPaginationProps {
     total: number;
+    clickPage: (page: number) => void;
 }
 
-const BasicPagination: React.FC<BasicPaginationProps> = (props) => {
+const BasicPagination: React.FC<BasicPaginationProps> = ({ total, clickPage }) => {
     return (
         <Stack spacing={2}>
             <Pagination
-                count={props.total}
+                count={total}
                 onChange={(_, page) => {
-                    console.log(page, "이건가?");
+                    clickPage(page);
                 }}
             />
         </Stack>

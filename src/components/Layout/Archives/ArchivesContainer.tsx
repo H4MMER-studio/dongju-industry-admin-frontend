@@ -64,7 +64,7 @@ const ArchivesContainer: React.FC = () => {
     const { archiveList } = useGetStore.notice();
 
     useEffect(() => {
-        dispatch(noticeActions.getNoticeList({ value: "archive", skip: 1, limit: 30, sort: "created-at desc" }));
+        dispatch(noticeActions.getNoticeList({ value: "archive", skip: 1, limit: 10, sort: "created-at desc" }));
     }, []);
 
     return (
@@ -79,7 +79,14 @@ const ArchivesContainer: React.FC = () => {
                 </SelectorLayout>
             </FlexRightLayout>
             <Archives.ArchiveListTable list={archiveList.data} />
-            {/* <Widgets.Pagination.BasicPagination /> */}
+            <Widgets.Pagination.BasicPagination
+                total={
+                    Number.isInteger(archiveList.size / 10)
+                        ? archiveList.data.length / 10
+                        : Math.floor(archiveList.size / 10) + 1
+                }
+                clickPage={() => {}}
+            />
         </ArchivesContainerLayout>
     );
 };
