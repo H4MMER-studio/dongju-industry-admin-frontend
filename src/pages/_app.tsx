@@ -47,10 +47,10 @@ function App({ Component, pageProps }: AppProps) {
   const { height } = useResize();
 
   useEffect(() => {
-    const dongjuAdminToken = localStorage.getItem('dongju-admin-token');
-    if (!dongjuAdminToken) {
-      router.push('/login');
-    }
+    // const dongjuAdminToken = localStorage.getItem('dongju-admin-token');
+    // if (!dongjuAdminToken) {
+    //   router.push('/login');
+    // }
   }, []);
 
   const onClickMenu = (menu: string) => {

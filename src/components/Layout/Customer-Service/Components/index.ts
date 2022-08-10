@@ -1,5 +1,4 @@
-import Service from './Service';
-import InfoCard from './InfoCard';
-import FormModal from './FormModal';
+import SearchBar from "./SearchBar";
+import ListTable from "./ListTable";
 
-export { Service, InfoCard, FormModal };
+export { SearchBar, ListTable };

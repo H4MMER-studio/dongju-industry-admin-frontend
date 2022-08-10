@@ -18,6 +18,12 @@ export const Notice = {
     Container: NoticeContainer,
 };
 
+//Archives
+import ArchivesContainer from "./Layout/Archives/ArchivesContainer";
+export const Archives = {
+    Container: ArchivesContainer,
+};
+
 //Notice Detail
 import NoticeDetailContainer from "./Layout/Notice-Detail/NoticeDetailContainer";
 

@@ -1,22 +1,23 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import {
-  selectHomeState,
-  selectHistoryState,
-  selectPerformanceState,
-  selectCertificationState,
-} from '@/store';
+    selectHomeState,
+    selectHistoryState,
+    selectPerformanceState,
+    selectCertificationState,
+    selectNoticeState,
+} from "@/store";
 
 function useGetRootState() {
-  const rootState = useSelector((rootState) => rootState);
-  return rootState;
+    const rootState = useSelector((rootState) => rootState);
+    return rootState;
 }
 
 export const useGetStore = {
-  home: () => selectHomeState(useGetRootState().home),
-  history: () => selectHistoryState(useGetRootState().history),
-  performance: () => selectPerformanceState(useGetRootState().performance),
-  certification: () =>
-    selectCertificationState(useGetRootState().certification),
+    home: () => selectHomeState(useGetRootState().home),
+    history: () => selectHistoryState(useGetRootState().history),
+    performance: () => selectPerformanceState(useGetRootState().performance),
+    certification: () => selectCertificationState(useGetRootState().certification),
+    notice: () => selectNoticeState(useGetRootState().notice),
 };
 
-export * from './useResize';
+export * from "./useResize";
