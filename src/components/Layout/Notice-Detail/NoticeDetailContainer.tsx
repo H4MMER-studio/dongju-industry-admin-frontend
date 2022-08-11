@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { noticeActions } from "@/store";
 import { useDispatch } from "react-redux";
 import { useGetStore } from "@/hooks";
+import { SkeletonUI } from "@/components/widgets";
+import { width } from "@mui/system";
 
 const NoticeDetailContainer: React.FC = () => {
     const router = useRouter();
@@ -16,38 +18,59 @@ const NoticeDetailContainer: React.FC = () => {
     useEffect(() => {
         let params = router.query as { id: string };
         dispatch(noticeActions.getNoticeDetail({ noticeId: params.id }));
+
+        return () => {
+            dispatch(noticeActions.setNoticeDetail({ data: { current: null } }));
+        };
     }, []);
 
     return (
         <NoticeDetailContainerLayout>
             <Header>
-                <Title>{noticeDetail.data.current?.notice_title}</Title>
+                {noticeDetail.data.current ? (
+                    <Title>{noticeDetail.data.current.notice_title}</Title>
+                ) : (
+                    <SkeletonUI variant={"text"} width={400} height={70} />
+                )}
+
                 <WriterLayout>
                     <WriterProfilImage src={"/image/favi.png"} />
                     <div>
                         <Writer>동주산업</Writer>
-                        <DateText>{newDate}</DateText>
+                        {noticeDetail.data.current ? (
+                            <DateText>{newDate}</DateText>
+                        ) : (
+                            <SkeletonUI variant="text" width={200} height={30} />
+                        )}
                     </div>
                 </WriterLayout>
             </Header>
-            {(noticeDetail.data.current?.notice_images?.length ?? 0) > 0 && (
-                <ContentImage
-                    alt={noticeDetail.data.current?.notice_images[0].name}
-                    src={noticeDetail.data.current?.notice_images[0].url}
-                />
+            {noticeDetail.data.current ? (
+                <>
+                    {(noticeDetail.data.current.notice_images?.length ?? 0) > 0 && (
+                        <ContentImage
+                            alt={noticeDetail.data.current?.notice_images[0].name}
+                            src={noticeDetail.data.current?.notice_images[0].url}
+                        />
+                    )}
+                    {(noticeDetail.data.current.notice_files?.length ?? 0) > 0 &&
+                        noticeDetail.data.current?.notice_files.map(({ name, url }) => {
+                            return (
+                                <DownloadFileLayout href={url} download={name} target="_blank">
+                                    <DownloadFileName>
+                                        {noticeDetail.data.current?.notice_files[0].name}
+                                    </DownloadFileName>
+                                    <Icon.DownloadIconBlue />
+                                </DownloadFileLayout>
+                            );
+                        })}
+                    {/* <ContentsContainer>{"내용 입니다."}</ContentsContainer> */}
+                    {/* <SubText>{detail.current.notice_content}</SubText> */}
+                    <SubText>{noticeDetail.data.current.notice_content}</SubText>
+                </>
+            ) : (
+                <SkeletonUI variant="rectangular" width={"100%"} height={600} />
             )}
-            {(noticeDetail.data.current?.notice_files?.length ?? 0) > 0 &&
-                noticeDetail.data.current?.notice_files.map(({ name, url }) => {
-                    return (
-                        <DownloadFileLayout href={url} download={name} target="_blank">
-                            <DownloadFileName>{noticeDetail.data.current?.notice_files[0].name}</DownloadFileName>
-                            <Icon.DownloadIconBlue />
-                        </DownloadFileLayout>
-                    );
-                })}
-            {/* <ContentsContainer>{"내용 입니다."}</ContentsContainer> */}
-            {/* <SubText>{detail.current.notice_content}</SubText> */}
-            <SubText>{noticeDetail.data.current?.notice_content}</SubText>
         </NoticeDetailContainerLayout>
     );
 };

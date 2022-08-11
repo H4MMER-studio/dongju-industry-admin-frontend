@@ -7,8 +7,6 @@ export function* getCertificationListSaga({}: {}) {
     try {
         const certificationList: ICertificationList = yield call(API.GET, `${CERTIFICATIONS_API}`);
 
-        console.log("인증서 가져오기 성공:");
-
         yield put(certificationActions.setCertificationList(certificationList));
     } catch (error) {
         console.log("인증서 가져오기 샐패:", error);
