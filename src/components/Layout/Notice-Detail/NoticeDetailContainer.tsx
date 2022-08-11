@@ -64,8 +64,6 @@ const NoticeDetailContainer: React.FC = () => {
                                 </DownloadFileLayout>
                             );
                         })}
-                    {/* <ContentsContainer>{"내용 입니다."}</ContentsContainer> */}
-                    {/* <SubText>{detail.current.notice_content}</SubText> */}
                     <SubText>{noticeDetail.data.current.notice_content}</SubText>
                 </>
             ) : (
