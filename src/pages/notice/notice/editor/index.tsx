@@ -1,10 +1,13 @@
-import React from "react";
-import { NextPage } from "next";
-import Router from "next/router";
-import { Editor } from "@/components";
+import React from 'react';
+import { NextPage } from 'next';
+import { Editor } from '@/components';
 
 const EditorView: NextPage = () => {
-    return <Editor.Container />;
+  return (
+    <>
+      <Editor.Container />
+    </>
+  );
 };
 
 export default EditorView;

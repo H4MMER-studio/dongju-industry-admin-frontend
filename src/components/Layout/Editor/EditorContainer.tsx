@@ -1,40 +1,43 @@
-import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import CKEditor from "./CKEditor";
+import React, { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import CKEditor from './CKEditor';
+import { QuillEditor } from '@/components';
+import { mixins } from '@/styles';
 
 const EditorContainerLayout = styled.div`
-    width: 100%;
-    padding-top: 24px;
-    padding-bottom: 20px;
-    display: flex;
-    justify-content: center;
+  ${mixins.flexSet('center', 'flex-start')}
+  width: 100%;
+  padding-top: 24px;
+  padding-bottom: 20px;
+`;
 
-    .ck-content {
-        width: 100%;
-        height: calc(100vh - 84px);
-    }
+const EditorWrapper = styled.div`
+  background-color: white;
 `;
 
 const EditorContainer: React.FC = () => {
-    const [editorLoaded, setEditorLoaded] = useState(false);
-    const [data, setData] = useState("");
+  const [editorLoaded, setEditorLoaded] = useState(false);
+  const [data, setData] = useState('');
 
-    useEffect(() => {
-        setEditorLoaded(true);
-    }, []);
+  useEffect(() => {
+    setEditorLoaded(true);
+  }, []);
 
-    return (
-        <EditorContainerLayout>
-            <CKEditor
+  return (
+    <EditorContainerLayout>
+      {/* <CKEditor
                 name="description"
                 value=""
                 onChange={(data) => {
                     setData(data);
                 }}
                 editorLoaded={editorLoaded}
-            />
-        </EditorContainerLayout>
-    );
+            /> */}
+      <EditorWrapper>
+        <QuillEditor htmlStr={data} setHtmlStr={(str) => setData(str)} />
+      </EditorWrapper>
+    </EditorContainerLayout>
+  );
 };
 
 export default EditorContainer;
