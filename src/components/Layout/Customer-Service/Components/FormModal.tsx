@@ -5,23 +5,11 @@ import EstimateForm from './EstimateForm';
 import useResize from '@/hooks/useResize';
 
 interface Iprops {
-  questionType?: 'estimate' | 'A/S' | 'ETC';
   closeForm: () => void;
 }
 
-const FormModal: React.FC<Iprops> = ({ questionType, closeForm }) => {
+const FormModal: React.FC<Iprops> = ({  closeForm }) => {
   const { width } = useResize();
-
-  const displayForm = (type?: 'estimate' | 'A/S' | 'ETC') => {
-    return <EstimateForm closeForm={closeForm} />;
-    // switch (type) {
-    //   case 'estimate':
-    //     return <EstimateForm closeForm={closeForm} />;
-
-    //   default:
-    //     return null;
-    // }
-  };
 
   const setModalStyle = () => {
     if (width <= 1023) {
@@ -31,7 +19,9 @@ const FormModal: React.FC<Iprops> = ({ questionType, closeForm }) => {
 
   return (
     <Widgets.Layout.ModalLayout onClose={() => {}} paperStyle={setModalStyle()}>
-      <FormLayout>{displayForm(questionType)}</FormLayout>
+      <FormLayout>
+       <EstimateForm closeForm={closeForm} />
+      </FormLayout>
     </Widgets.Layout.ModalLayout>
   );
 };

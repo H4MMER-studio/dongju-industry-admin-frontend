@@ -1,5 +1,6 @@
-import React from "react";
+import React,{useState, ReactNode} from "react";
 import styled from "styled-components";
+import FormModal from "./FormModal"
 
 const ListTableLayout = styled.div``;
 
@@ -45,27 +46,37 @@ const TableData = styled.td`
 `;
 
 const ListTable: React.FC = () => {
+    const [form, setForm] = useState<ReactNode | null>(null)
+
+    const clickItem = () => {
+        setForm(<FormModal closeForm={()=>{setForm(null)}} />)
+    }
+
+
     return (
-        <ListTableLayout>
-            <ListTableEle>
-                <TableHeader minWidth={120}>날짜</TableHeader>
-                <TableHeader minWidth={120}>분류</TableHeader>
-                <TableHeader minWidth={357}>제목</TableHeader>
-                <TableHeader minWidth={140}>회사명</TableHeader>
-                <TableHeader minWidth={120}>담당자 성함</TableHeader>
-                <TableHeader minWidth={120}>상태</TableHeader>
-                {TEST_DATE.map((d, i) => (
-                    <TableRow key={i}>
-                        <TableData>{d.date}</TableData>
-                        <TableData>{d.date}</TableData>
-                        <TableData>{d.date}</TableData>
-                        <TableData>{d.date}</TableData>
-                        <TableData>{d.date}</TableData>
-                        <TableData>{d.date}</TableData>
-                    </TableRow>
-                ))}
-            </ListTableEle>
-        </ListTableLayout>
+        <>
+            {form}
+            <ListTableLayout>
+                <ListTableEle>
+                    <TableHeader minWidth={120}>날짜</TableHeader>
+                    <TableHeader minWidth={120}>분류</TableHeader>
+                    <TableHeader minWidth={357}>제목</TableHeader>
+                    <TableHeader minWidth={140}>회사명</TableHeader>
+                    <TableHeader minWidth={120}>담당자 성함</TableHeader>
+                    <TableHeader minWidth={120}>상태</TableHeader>
+                    {TEST_DATE.map((d, i) => (
+                        <TableRow key={i} onClick={() => {clickItem()}}>
+                            <TableData>{d.date}</TableData>
+                            <TableData>{d.date}</TableData>
+                            <TableData>{d.date}</TableData>
+                            <TableData>{d.date}</TableData>
+                            <TableData>{d.date}</TableData>
+                            <TableData>{d.date}</TableData>
+                        </TableRow>
+                    ))}
+                </ListTableEle>
+            </ListTableLayout>
+        </>
     );
 };
 
