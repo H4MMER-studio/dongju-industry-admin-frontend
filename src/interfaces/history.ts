@@ -4,7 +4,7 @@ export interface IHistoryInitialState {
 
 export interface IHistoryList {
   start_year: string;
-  value: IHistory[];
+  data: IHistory[];
 }
 
 export interface IHistory {

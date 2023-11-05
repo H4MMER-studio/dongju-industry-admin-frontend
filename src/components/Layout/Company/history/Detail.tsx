@@ -207,14 +207,14 @@ const Detail: React.FC<IProps> = ({
 
   return (
     <>
-      {historyList.map(({ start_year, value }) => {
+      {historyList.map(({ start_year, data }) => {
         const newValue = {} as {
           [key: string]: (Omit<IHistory, 'history_content'> & {
             history_content: string[];
           })[];
         };
         const yearObjValue = {} as { [key: string]: IHistory[] };
-        value.forEach((v) => {
+        data.forEach((v) => {
           if ((newValue[v.history_year]?.length ?? 0) > 0) {
             let isExist = false;
             newValue[v.history_year] = newValue[v.history_year].map((v2) => {
@@ -302,9 +302,13 @@ const Detail: React.FC<IProps> = ({
                             ({ _id, history_month, history_content }) => (
                               <MonthHistoryLayout key={_id}>
                                 <div className="month">{history_month}월</div>
-                                {history_content.reverse().map((content) => (
-                                  <DetailContents>{content}</DetailContents>
-                                ))}
+                                {history_content
+                                  .reverse()
+                                  .map((content, index) => (
+                                    <DetailContents key={index}>
+                                      {content}
+                                    </DetailContents>
+                                  ))}
                               </MonthHistoryLayout>
                             )
                           )}
