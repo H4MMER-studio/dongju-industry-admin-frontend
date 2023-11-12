@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import XLSX, { WorkSheet } from 'xlsx';
 import * as S from './index.style';
 import { IconDownArrowGray } from '@svg';
 import { AddInfo } from '../index';
+import axios from 'axios';
 
 interface IProps {
   addInfo: AddInfo;
@@ -9,11 +11,18 @@ interface IProps {
   onClickAddButton(): void;
 }
 
+type UploadFile = {
+  file: any;
+  jsonData: string;
+} | null;
+
 const AddPerformance: React.FC<IProps> = ({
   addInfo,
   addInfoHandler,
   onClickAddButton,
 }) => {
+  const [uploadedFile, setUploadedFile] = useState<UploadFile>(null);
+
   const {
     delivery_amount,
     delivery_month,
@@ -29,6 +38,35 @@ const AddPerformance: React.FC<IProps> = ({
   const monthList = Array(12)
     .fill(0)
     .map((_, index) => index + 1);
+
+  const handleDrop = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      try {
+        const formData = new FormData();
+
+        if (!e.target.files) return;
+        formData.append('file', e.target.files[0]);
+
+        console.log(e.target.files[0]);
+        await axios({
+          method: 'post',
+          url: 'https://api.dongjuind.co.kr/v1/deliveries',
+          data: formData,
+          headers: {
+            Authorization: localStorage.getItem('dongju-admin-token')
+              ? `${localStorage.getItem('dongju-admin-token')}`
+              : '',
+          },
+        });
+        alert('업로드 완료!');
+        e.target.value = '';
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    []
+  );
 
   return (
     <S.Container>
@@ -108,9 +146,23 @@ const AddPerformance: React.FC<IProps> = ({
           />
         </S.ItemWrapper>
       </S.AddContainer>
-      <S.AddButton>
-        <button onClick={onClickAddButton}>추가</button>
-      </S.AddButton>
+      <S.ButtonWrapper>
+        <S.AddButton>
+          <button onClick={onClickAddButton}>추가</button>
+        </S.AddButton>
+        <S.AddButton>
+          <label className="label" htmlFor="fileUpload">
+            엑셀 업로드
+          </label>
+          <input
+            id="fileUpload"
+            className="file_input"
+            type="file"
+            accept=".xlsx, .xls, .csv"
+            onChange={handleDrop}
+          />
+        </S.AddButton>
+      </S.ButtonWrapper>
     </S.Container>
   );
 };

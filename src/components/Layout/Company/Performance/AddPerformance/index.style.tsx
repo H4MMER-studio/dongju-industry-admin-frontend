@@ -31,12 +31,17 @@ export const AddContainer = styled.div`
   overflow-x: auto;
 `;
 
+export const ButtonWrapper = styled.div`
+  ${mixins.flexSet('flex-end')}
+  column-gap: 0.5rem;
+  margin-bottom: 48px;
+`;
+
 export const AddButton = styled.div`
   ${mixins.flexSet('flex-end')}
-  margin-bottom: 48px;
 
   button {
-    width: 90px;
+    width: 100px;
     height: 48px;
     background: #2979ff;
     border-radius: 8px;
@@ -44,6 +49,24 @@ export const AddButton = styled.div`
     font-size: 17px;
     line-height: 24px;
     color: white;
+  }
+
+  .label {
+    ${mixins.flexSet()}
+    width: 100px;
+    height: 48px;
+    background: #2979ff;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 24px;
+    color: white;
+    cursor: pointer;
+  }
+
+  .file_input {
+    width: 0rem;
+    height: 0rem;
   }
 `;
 
