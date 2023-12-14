@@ -7,7 +7,7 @@ import { noticeActions } from '@/store';
 import { useRouter } from 'next/router';
 import { useGetStore } from '@/hooks';
 
-const EditorView: NextPage = () => {
+const ArchiveEditorView: NextPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { mode } = router.query as { mode?: string };
@@ -25,13 +25,11 @@ const EditorView: NextPage = () => {
   }: Omit<IPostNoticeParams, 'notice_type'>) => {
     const formData = new FormData();
 
-    formData.append('notice_type', 'notification');
+    formData.append('notice_type', 'archive');
     formData.append('notice_content', notice_content);
     formData.append('notice_title', notice_title);
 
-    dispatch(
-      noticeActions.postNotice({ data: formData, type: 'notification' })
-    );
+    dispatch(noticeActions.postNotice({ data: formData, type: 'archive' }));
   };
 
   const onClickModify = ({
@@ -45,14 +43,14 @@ const EditorView: NextPage = () => {
   }) => {
     const formData = new FormData();
 
-    formData.append('notice_type', 'notification');
+    formData.append('notice_type', 'archive');
     formData.append('notice_content', notice_content);
     formData.append('notice_title', notice_title);
 
     dispatch(
       noticeActions.patchNotice({
         formData,
-        notice_type: 'notification',
+        notice_type: 'archive',
         notice_id: id,
       })
     );
@@ -69,4 +67,4 @@ const EditorView: NextPage = () => {
   );
 };
 
-export default EditorView;
+export default ArchiveEditorView;

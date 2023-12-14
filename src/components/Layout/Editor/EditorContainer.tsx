@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { QuillEditor } from '@/components';
 import { mixins } from '@/styles';
+import { INotificationInitialState, IPostNoticeParams } from '@/interfaces';
+import { useGetStore } from '@/hooks';
+import { useRouter } from 'next/router';
 
 const EditorContainerLayout = styled.div`
   ${mixins.flexSet('center', 'center', 'column')}
@@ -55,14 +58,38 @@ const STDPostButton = styled.div`
   }
 `;
 
-const EditorContainer: React.FC = () => {
+interface IProps {
+  onClickSave(data: Omit<IPostNoticeParams, 'notice_type'>): void;
+  onClickModify(data: {
+    id: string;
+    notice_content: string;
+    notice_title: string;
+  }): void;
+  prevData?: INotificationInitialState['noticeDetail'];
+}
+
+const EditorContainer: React.FC<IProps> = ({
+  prevData,
+  onClickSave,
+  onClickModify,
+}) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
   const [data, setData] = useState('');
   const [title, setTitle] = useState('');
+  const router = useRouter();
+  const { mode } = router.query as { mode?: string };
+  const isAddMode = mode === 'add';
 
   useEffect(() => {
     setEditorLoaded(true);
   }, []);
+
+  useEffect(() => {
+    if (!isAddMode && prevData?.data.current) {
+      setData(prevData.data.current.notice_content);
+      setTitle(prevData.data.current.notice_title);
+    }
+  }, [prevData]);
 
   return (
     <EditorContainerLayout>
@@ -78,7 +105,24 @@ const EditorContainer: React.FC = () => {
         <QuillEditor htmlStr={data} setHtmlStr={(str) => setData(str)} />
       </EditorWrapper>
       <STDPostButton>
-        <button className="button">저장</button>
+        <button
+          className="button"
+          onClick={() => {
+            if (isAddMode) {
+              onClickSave({ notice_content: data, notice_title: title });
+            } else {
+              mode
+                ? onClickModify({
+                    id: mode,
+                    notice_title: title,
+                    notice_content: data,
+                  })
+                : console.error('id가 없습니다');
+            }
+          }}
+        >
+          {isAddMode ? '저장' : '수정하기'}
+        </button>
       </STDPostButton>
     </EditorContainerLayout>
   );

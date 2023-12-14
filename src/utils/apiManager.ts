@@ -123,20 +123,38 @@ const DELETE = async (
   }
 };
 
-const PATCH = async (entry: string, { bodyData }: { bodyData: any }) => {
+const PATCH = async (
+  entry: string,
+  { bodyData }: { bodyData: any },
+  contentType?: 'form'
+) => {
   if (typeof window !== 'undefined') {
     try {
-      const res = await instance({
-        url: entry,
-        method: 'PATCH',
-        data: bodyData,
-        headers: {
-          Authorization: localStorage.getItem('dongju-admin-token')
-            ? `${localStorage.getItem('dongju-admin-token')}`
-            : '',
-        },
-      });
-      return res;
+      if (contentType === 'form') {
+        const data = await formDataInstance({
+          url: entry,
+          method: 'PATCH',
+          data: bodyData,
+          headers: {
+            Authorization: localStorage.getItem('dongju-admin-token')
+              ? `${localStorage.getItem('dongju-admin-token')}`
+              : '',
+          },
+        });
+        return data.data;
+      } else {
+        const res = await instance({
+          url: entry,
+          method: 'PATCH',
+          data: bodyData,
+          headers: {
+            Authorization: localStorage.getItem('dongju-admin-token')
+              ? `${localStorage.getItem('dongju-admin-token')}`
+              : '',
+          },
+        });
+        return res;
+      }
     } catch (error) {
       const err = error as AxiosError;
       const code = err.response?.status;

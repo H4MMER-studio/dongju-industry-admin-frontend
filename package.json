@@ -49,6 +49,7 @@
     "@types/xlsx": "^0.0.36",
     "babel-loader": "^8.2.2",
     "babel-plugin-styled-components": "^1.13.2",
+    "html-react-parser": "^5.0.7",
     "quill-image-compress": "^1.2.26",
     "quill-image-drop-module": "^1.0.3",
     "quill-image-resize-module-react": "^3.0.0",
