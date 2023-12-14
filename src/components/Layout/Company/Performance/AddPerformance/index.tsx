@@ -107,7 +107,6 @@ const AddPerformance: React.FC<IProps> = ({
           <S.SelectBox width={100}>
             <select
               className="inputStyle"
-              placeholder="날짜"
               onChange={(e) => addInfoHandler('delivery_year', e.target.value)}
               value={delivery_year}
             >
@@ -123,7 +122,6 @@ const AddPerformance: React.FC<IProps> = ({
           <S.SelectBox width={100}>
             <select
               className="inputStyle"
-              placeholder="날짜"
               onChange={(e) => addInfoHandler('delivery_month', e.target.value)}
               value={delivery_month}
             >

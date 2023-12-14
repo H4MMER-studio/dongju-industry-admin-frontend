@@ -130,7 +130,6 @@ const PatchHistoryItem: React.FC<IProps> = ({
         <STDSelectYearBox>
           <select
             className="selectStyle"
-            placeholder="연도"
             value={patchInfo.history_year}
             onChange={(e) => patchInfoHandler('history_year', e.target.value)}
           >

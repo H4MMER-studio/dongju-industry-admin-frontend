@@ -86,8 +86,7 @@ const PerformanceItem: React.FC<IProps> = ({
           />
           <S.SelectBox width={0.3}>
             <select
-              className='inputStyle'
-              placeholder='날짜'
+              className="inputStyle"
               onChange={(e) =>
                 patchInfoHandler('delivery_year', e.target.value)
               }
@@ -97,12 +96,11 @@ const PerformanceItem: React.FC<IProps> = ({
                 <option key={year}>{year}</option>
               ))}
             </select>
-            <IconDownArrowGray className='svgStyle' />
+            <IconDownArrowGray className="svgStyle" />
           </S.SelectBox>
           <S.SelectBox width={0.3}>
             <select
-              className='inputStyle'
-              placeholder='날짜'
+              className="inputStyle"
               onChange={(e) =>
                 patchInfoHandler('delivery_month', e.target.value)
               }
@@ -112,7 +110,7 @@ const PerformanceItem: React.FC<IProps> = ({
                 <option key={month}>{month}</option>
               ))}
             </select>
-            <IconDownArrowGray className='svgStyle' />
+            <IconDownArrowGray className="svgStyle" />
           </S.SelectBox>
           <S.InputBox
             width={0.74}
@@ -144,7 +142,7 @@ const PerformanceItem: React.FC<IProps> = ({
             취소
           </S.ModifyButton>
           <S.ModifyButton
-            color='blue'
+            color="blue"
             onClick={() => {
               onClickPatchDelivery(_id, patchInfo);
               onClickSetSelectedInfo(null);
@@ -170,7 +168,7 @@ const PerformanceItem: React.FC<IProps> = ({
               삭제
             </S.ModifyButton>
             <S.ModifyButton
-              color='blue'
+              color="blue"
               onClick={() => {
                 onClickSetSelectedInfo({
                   id: _id,

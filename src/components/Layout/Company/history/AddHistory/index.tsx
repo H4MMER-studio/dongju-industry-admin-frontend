@@ -137,7 +137,6 @@ const AddHistory: React.FC<IProps> = ({
         <STDSelectYearBox>
           <select
             className="selectStyle"
-            placeholder="연도"
             value={addInfo.selectedyear}
             onChange={(e) => addInfoHandler('selectedyear', e.target.value)}
           >
