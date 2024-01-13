@@ -5,6 +5,8 @@ import { Images } from 'public/image';
 import useResize from '@/hooks/useResize';
 import { useDispatch } from 'react-redux';
 import { inquiryActions } from '@/store/module/inquiry';
+import { Widgets } from '@/components';
+import { useGetStore } from '@/hooks';
 
 interface Iprops {
   questionType: 'estimate' | 'A/S' | 'ETC';
@@ -34,36 +36,83 @@ const CustomerServiceSearchBar = styled.div`
   margin-bottom: 12px;
 `;
 
+const CenterLayout = styled.div`
+  width: calc(100% - 108px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+`;
+
 const CustomerServiceContainer: React.FC<Iprops> = ({
   questionType,
   clickContact,
   closeForm,
 }) => {
+  const [skip, setSkip] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [option, setOption] = useState<string>('inquiry_company_name');
   const { width } = useResize();
   const dispatch = useDispatch();
+  const { inqueries } = useGetStore.inquiry();
 
   useEffect(() => {
-    console.log('문의 가져오기');
-    dispatch(
-      inquiryActions.getInquiries({
-        skip: 1,
-        limit: 30,
-        sort: 'created-at desc',
-      })
-    );
-  }, []);
+    if (searchKeyword) {
+      setSkip(1);
+      setLimit(10);
+      dispatch(
+        inquiryActions.getInquiries({
+          skip: 1,
+          limit: 10,
+          sort: 'created-at desc',
+          field: option as 'inquiry_company_name' | 'inquiry_person_name',
+          value: searchKeyword,
+        })
+      );
+    } else {
+      dispatch(
+        inquiryActions.getInquiries({
+          skip: skip,
+          limit: limit,
+          sort: 'created-at desc',
+        })
+      );
+    }
+  }, [skip, searchKeyword]);
 
   return (
     <CustomerServiceContainerLayout>
       <Title>문의</Title>
       <CustomerServiceSearchBar>
-        <CustomerServiceComponents.SearchBar options={OPTIONS} />
+        <CustomerServiceComponents.SearchBar
+          searchKeyword={searchKeyword}
+          options={OPTIONS}
+          onChangeSearch={setSearchKeyword}
+          onClickOption={setOption}
+        />
       </CustomerServiceSearchBar>
       <CustomerServiceComponents.ListTable />
+      <CenterLayout>
+        <Widgets.Pagination.BasicPagination
+          total={
+            Number.isInteger(inqueries.size / 10)
+              ? inqueries.data.length / 10
+              : Math.floor(inqueries.size / 10) + 1
+          }
+          clickPage={(page) => {
+            setSkip(page * 10 - 9);
+            setLimit(page * 10);
+          }}
+        />
+      </CenterLayout>
     </CustomerServiceContainerLayout>
   );
 };
 
 export default CustomerServiceContainer;
 
-const OPTIONS = [{ name: '납품처', value: '납품처' }];
+const OPTIONS = [
+  { name: '회사명', field: 'inquiry_company_name' },
+  { name: '담당자', field: 'inquiry_person_name' },
+];

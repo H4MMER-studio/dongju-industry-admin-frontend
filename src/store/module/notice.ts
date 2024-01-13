@@ -1,9 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   INotificationInitialState,
-  INotice,
   IGetNoticeParams,
-  IPostNoticeParams,
   IPatchNoticeParams,
 } from '@/interfaces';
 

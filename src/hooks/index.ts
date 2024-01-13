@@ -24,3 +24,4 @@ export const useGetStore = {
 };
 
 export * from './useResize';
+export * from './useDebounce';

@@ -6,10 +6,15 @@ import { IGetInqueriesParams, ActionType } from '@/interfaces';
 export function* getInquiriesSaga({
   payload,
 }: ActionType & { payload: IGetInqueriesParams }) {
-  console.log('문의 가져오기 통시 사가');
   try {
-    console.log('호호 페이로드>>', payload);
-    const inquiries = yield call(API.GET, `${INQUIRIES_API}`);
+    const searchParams = `&type=search&field=${payload.field}&value=${payload.value}`;
+    const inquiries = yield call(
+      API.GET,
+      `${INQUIRIES_API}?skip=${payload.skip}&limit=${payload.limit}${
+        payload.value ? searchParams : ''
+      }`
+    );
+
     yield put(inquiryActions.setInquiries(inquiries));
   } catch (err) {}
 }

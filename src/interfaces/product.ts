@@ -8,7 +8,8 @@ export interface ProductType {
     | 'freeze-protection-damper-coil'
     | 'exhaust-unit'
     | 'bubble-damper'
-    | 'fully-sealed-door';
+    | 'fully-sealed-door'
+    | 'air-blower';
 }
 
 export interface ProductMenu {
