@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface InputBoxProps {
   type: string;
   placeholder: string;
+  value: string;
 }
 
 const InputBoxLayout = styled.div`
@@ -32,11 +33,11 @@ const Input = styled.input`
   align-items: center;
 `;
 
-const InputBox: React.FC<InputBoxProps> = ({ type, placeholder }) => {
+const InputBox: React.FC<InputBoxProps> = ({ type, placeholder, value }) => {
   return (
     <InputBoxLayout>
       <Type>{type}</Type>
-      <Input placeholder={placeholder} />
+      <Input value={value} disabled />
     </InputBoxLayout>
   );
 };

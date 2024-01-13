@@ -99,7 +99,7 @@ const ArchivesContainer: React.FC = () => {
       <FlexRightLayout>
         <SelectorLayout>
           <Widgets.Select.Selector
-            options={[{ name: '최신순', value: '최신순' }]}
+            options={[{ name: '최신순', field: '최신순' }]}
           />
         </SelectorLayout>
       </FlexRightLayout>

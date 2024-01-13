@@ -153,7 +153,7 @@ const CertificationItem: React.VFC<IProps> = (props) => {
                 alt="인증서 사진"
               />
               <Overlay isHover={props.certificationId === hoveredId}>
-                <ModifyButton>수정</ModifyButton>
+                {/* <ModifyButton>수정</ModifyButton> */}
                 <DeleteButton onClick={() => setOpenDeleteModal(true)}>
                   <IconClose />
                 </DeleteButton>
